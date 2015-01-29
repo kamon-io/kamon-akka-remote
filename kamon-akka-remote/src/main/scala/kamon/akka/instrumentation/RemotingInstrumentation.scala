@@ -1,12 +1,12 @@
-package akka.remote.instrumentation
+package akka.kamon.instrumentation
 
 import akka.actor.{ ActorRef, Address }
 import akka.remote.instrumentation.TraceContextAwareWireFormats.{ TraceContextAwareRemoteEnvelope, RemoteTraceContext, AckAndTraceContextAwareEnvelopeContainer }
 import akka.remote.{ RemoteActorRefProvider, Ack, SeqNo }
 import akka.remote.WireFormats._
 import akka.util.ByteString
-import kamon.MilliTimestamp
-import kamon.trace.TraceRecorder
+import kamon.trace.{ Tracer, TraceContext }
+import kamon.util.MilliTimestamp
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation._
 
@@ -32,15 +32,13 @@ class RemotingInstrumentation {
     envelopeBuilder.setMessage(serializedMessage)
 
     // Attach the TraceContext info, if available.
-    if (!TraceRecorder.currentContext.isEmpty) {
-      val context = TraceRecorder.currentContext
-      val relativeStartMilliTime = System.currentTimeMillis - ((System.nanoTime - context.startRelativeTimestamp.nanos) / 1000000)
+    TraceContext.map { context ⇒
 
       envelopeBuilder.setTraceContext(RemoteTraceContext.newBuilder()
         .setTraceName(context.name)
         .setTraceToken(context.token)
         .setIsOpen(context.isOpen)
-        .setStartMilliTime(relativeStartMilliTime)
+        .setStartMilliTime(context.startTimestamp.toMilliTimestamp.millis)
         .build())
     }
 
@@ -85,14 +83,16 @@ class RemotingInstrumentation {
     if (ackAndEnvelope.hasEnvelope && ackAndEnvelope.getEnvelope.hasTraceContext) {
       val remoteTraceContext = ackAndEnvelope.getEnvelope.getTraceContext
       val system = provider.guardian.underlying.system
-      val ctx = TraceRecorder.joinRemoteTraceContext(
-        remoteTraceContext.getTraceName(),
-        remoteTraceContext.getTraceToken(),
-        new MilliTimestamp(remoteTraceContext.getStartMilliTime()),
-        remoteTraceContext.getIsOpen(),
-        system)
+      val tracer = Tracer.get(system)
 
-      TraceRecorder.setContext(ctx)
+      val ctx = tracer.newContext(
+        remoteTraceContext.getTraceName,
+        remoteTraceContext.getTraceToken,
+        new MilliTimestamp(remoteTraceContext.getStartMilliTime()).toRelativeNanoTimestamp,
+        remoteTraceContext.getIsOpen,
+        isLocal = false)
+
+      TraceContext.setCurrentContext(ctx)
     }
 
     pjp.proceed()
