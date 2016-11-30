@@ -1,4 +1,4 @@
-Akka Remote Integration   ![Build Status](https://travis-ci.org/kamon-io/kamon-akka.svg?branch=master)
+Akka Remote Integration   ![Build Status](https://travis-ci.org/kamon-io/kamon-akka-remote.svg?branch=master)
 ==========================
 
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kamon-io/Kamon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
