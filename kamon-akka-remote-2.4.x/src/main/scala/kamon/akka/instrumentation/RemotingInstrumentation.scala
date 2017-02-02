@@ -1,6 +1,7 @@
 package akka.kamon.instrumentation
 
 import akka.actor.{ ActorRef, Address }
+import akka.KamonOptionVal.OptionVal
 import akka.remote.WireFormats._
 import akka.remote.instrumentation.TraceContextAwareWireFormats.{ AckAndTraceContextAwareEnvelopeContainer, RemoteTraceContext, TraceContextAwareRemoteEnvelope }
 import akka.remote.{ Ack, RemoteActorRefProvider, SeqNo }
@@ -17,17 +18,18 @@ class RemotingInstrumentation {
   @Pointcut("execution(* akka.remote.transport.AkkaPduProtobufCodec$.constructMessage(..)) && " +
     "args(localAddress, recipient, serializedMessage, senderOption, seqOption, ackOption)")
   def constructAkkaPduMessage(localAddress: Address, recipient: ActorRef, serializedMessage: SerializedMessage,
-    senderOption: Option[ActorRef], seqOption: Option[SeqNo], ackOption: Option[Ack]): Unit = {}
+    senderOption: OptionVal[ActorRef], seqOption: Option[SeqNo], ackOption: Option[Ack]): Unit = {}
 
   @Around("constructAkkaPduMessage(localAddress, recipient, serializedMessage, senderOption, seqOption, ackOption)")
   def aroundSerializeRemoteMessage(pjp: ProceedingJoinPoint, localAddress: Address, recipient: ActorRef,
-    serializedMessage: SerializedMessage, senderOption: Option[ActorRef], seqOption: Option[SeqNo], ackOption: Option[Ack]): AnyRef = {
+    serializedMessage: SerializedMessage, senderOption: OptionVal[ActorRef], seqOption: Option[SeqNo], ackOption: Option[Ack]): AnyRef = {
 
     val ackAndEnvelopeBuilder = AckAndTraceContextAwareEnvelopeContainer.newBuilder
     val envelopeBuilder = TraceContextAwareRemoteEnvelope.newBuilder
 
     envelopeBuilder.setRecipient(serializeActorRef(recipient.path.address, recipient))
-    senderOption foreach { ref ⇒ envelopeBuilder.setSender(serializeActorRef(localAddress, ref)) }
+    if (senderOption.isDefined)
+      envelopeBuilder.setSender(serializeActorRef(localAddress, senderOption.get))
     seqOption foreach { seq ⇒ envelopeBuilder.setSeq(seq.rawValue) }
     ackOption foreach { ack ⇒ ackAndEnvelopeBuilder.setAck(ackBuilder(ack)) }
     envelopeBuilder.setMessage(serializedMessage)

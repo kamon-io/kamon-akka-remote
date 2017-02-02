@@ -26,7 +26,7 @@ object Dependencies {
   val aspectjVersion    = "1.8.9"
 
   val akka23Version       = "2.3.13"
-  val akka24Version       = "2.4.10" //TODO kamon does not propagate trace context with akka 2.4.11+
+  val akka24Version       = "2.4.16"
 
   val aspectJ             = "org.aspectj"                 %   "aspectjweaver"         % aspectjVersion
 
