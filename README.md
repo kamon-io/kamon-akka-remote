@@ -22,7 +22,7 @@ propagated across the remoting channel provided by Akka. This hooks in the low l
 with Akka, which means it will propagate the `TraceContext` when using plain remoting as well as when using the Akka Cluster.
 
 <p class="alert alert-warning">
-If you are using Akka Remote 2.4 or Akka Cluster 2.4, please make sure that you are using the <b>kamon-akka-remote_akka-2.4</b>
+If you are using Akka Remote 2.4 or Akka Cluster 2.4, please make sure that you are using the <b>kamon-akka-remote-2.4</b>
 artifact instead of the regular <b>kamon-akka-remote</b>.
 </p>
 
