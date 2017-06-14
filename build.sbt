@@ -13,7 +13,7 @@
  * =========================================================================================
  */
 
-val kamonVersion      = "0.6.6"
+val kamonVersion        = "0.6.7"
 val akka23Version       = "2.3.13"
 val akka24Version       = "2.4.16"
 
@@ -45,7 +45,7 @@ lazy val kamonAkkaRemote23 = Project("kamon-akka-remote-23", file("kamon-akka-re
       bintrayPackage := "kamon-akka-remote",
       moduleName := "kamon-akka-remote-2.3",
       scalaVersion := "2.11.8",
-      crossScalaVersions := Seq("2.10.6", "2.11.8")))  
+      crossScalaVersions := Seq("2.10.6", "2.11.8")))
   .settings(
       libraryDependencies ++=
         compileScope(akkaActor23, kamonCore, kamonScala, kamonAkka23, akkaRemote23, akkaCluster23) ++
@@ -59,7 +59,7 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
       bintrayPackage := "kamon-akka-remote",
       moduleName := "kamon-akka-remote-2.4",
       scalaVersion := "2.12.1",
-      crossScalaVersions := Seq("2.11.8", "2.12.1")))    
+      crossScalaVersions := Seq("2.11.8", "2.12.1")))
   .settings(
       libraryDependencies ++=
         compileScope(akkaActor24, kamonCore, kamonScala, kamonAkka24, akkaRemote24, akkaCluster24) ++
