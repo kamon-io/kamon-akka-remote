@@ -1,4 +1,6 @@
+syntax = "proto2";
 import "WireFormats.proto";
+
 
 option java_package = "akka.remote.instrumentation";
 option optimize_for = SPEED;
@@ -23,8 +25,6 @@ message TraceContextAwareRemoteEnvelope {
 }
 
 message RemoteTraceContext {
-    required string traceName = 1;
-    required string traceToken = 2;
-    required bool isOpen = 3;
-    required fixed64 startMilliTime = 4;
+    required bytes context = 1;
 }
+
