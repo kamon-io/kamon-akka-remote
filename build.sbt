@@ -13,21 +13,23 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "0.6.7"
-val akka23Version       = "2.3.13"
+val kamonVersion        = "1.0.0-RC4"
+val kamonAkkaVersion    = "1.0.0-RC4"
+
 val akka24Version       = "2.4.16"
+val akka25Version       = "2.5.0"
 
 val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
-val kamonScala          = "io.kamon"                    %%  "kamon-scala"           % kamonVersion
-val kamonAkka23         = "io.kamon"                    %%  "kamon-akka-2.3"        % kamonVersion
-val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % kamonVersion
 val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"         % kamonVersion
+val kamonScala          = "io.kamon"                    %%  "kamon-scala"           % "1.0.0-RC4"
+val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
+val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % kamonAkkaVersion
 
-val akkaActor23         = "com.typesafe.akka"           %%  "akka-actor"            % akka23Version
-val akkaSlf4j23         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka23Version
-val akkaTestKit23       = "com.typesafe.akka"           %%  "akka-testkit"          % akka23Version
-val akkaRemote23        = "com.typesafe.akka"           %%  "akka-remote"           % akka23Version
-val akkaCluster23       = "com.typesafe.akka"           %%  "akka-cluster"          % akka23Version
+val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
+val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
+val akkaTestKit25       = "com.typesafe.akka"           %%  "akka-testkit"          % akka25Version
+val akkaRemote25        = "com.typesafe.akka"           %%  "akka-remote"           % akka25Version
+val akkaCluster25       = "com.typesafe.akka"           %%  "akka-cluster"          % akka25Version
 
 val akkaActor24         = "com.typesafe.akka"           %%  "akka-actor"            % akka24Version
 val akkaSlf4j24         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka24Version
@@ -35,36 +37,43 @@ val akkaTestKit24       = "com.typesafe.akka"           %%  "akka-testkit"      
 val akkaRemote24        = "com.typesafe.akka"           %%  "akka-remote"           % akka24Version
 val akkaCluster24       = "com.typesafe.akka"           %%  "akka-cluster"          % akka24Version
 
-lazy val `kamon-akka-remote` = (project in file("."))
-    .settings(noPublishing: _*)
-    .aggregate(kamonAkkaRemote23, kamonAkkaRemote24)
+val protobuf            = "com.google.protobuf"         % "protobuf-java"           % "3.4.0"
 
-lazy val kamonAkkaRemote23 = Project("kamon-akka-remote-23", file("kamon-akka-remote-2.3.x"))
+resolvers += Resolver.mavenLocal
+
+lazy val `kamon-akka-remote` = (project in file("."))
+  .settings(noPublishing: _*)
+  .aggregate(kamonAkkaRemote24, kamonAkkaRemote25)
+
+
+lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-remote-2.5.x"))
   .settings(aspectJSettings: _*)
   .settings(Seq(
       bintrayPackage := "kamon-akka-remote",
-      moduleName := "kamon-akka-remote-2.3",
+      moduleName := "kamon-akka-remote-2.5",
       scalaVersion := "2.11.8",
-      crossScalaVersions := Seq("2.10.6", "2.11.8")))
+      crossScalaVersions := Seq("2.12.1", "2.11.8")
+  ))
   .settings(
       libraryDependencies ++=
-        compileScope(akkaActor23, kamonCore, kamonScala, kamonAkka23, akkaRemote23, akkaCluster23) ++
+        compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25) ++
         providedScope(aspectJ) ++
         optionalScope(logbackClassic) ++
-        testScope(scalatest, akkaTestKit23, akkaSlf4j23, logbackClassic))
+        testScope(scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit))
 
 lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-remote-2.4.x"))
   .settings(aspectJSettings: _*)
   .settings(Seq(
       bintrayPackage := "kamon-akka-remote",
       moduleName := "kamon-akka-remote-2.4",
-      scalaVersion := "2.12.1",
-      crossScalaVersions := Seq("2.11.8", "2.12.1")))
+      scalaVersion := "2.11.8",
+      crossScalaVersions := Seq("2.11.8", "2.12.1")
+  ))
   .settings(
       libraryDependencies ++=
-        compileScope(akkaActor24, kamonCore, kamonScala, kamonAkka24, akkaRemote24, akkaCluster24) ++
+        compileScope(akkaActor24, kamonCore, kamonAkka24, kamonScala, akkaRemote24, akkaCluster24) ++
         providedScope(aspectJ) ++
         optionalScope(logbackClassic) ++
-        testScope(scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic))
+        testScope(scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
 enableProperCrossScalaVersionTasks

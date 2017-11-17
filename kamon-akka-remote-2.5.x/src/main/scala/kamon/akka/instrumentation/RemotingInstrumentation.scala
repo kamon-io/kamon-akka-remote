@@ -2,18 +2,16 @@ package akka.kamon.instrumentation
 
 import java.nio.ByteBuffer
 
-import akka.actor.{ActorRef, Address, AddressFromURIString, ExtendedActorSystem}
 import akka.KamonOptionVal.OptionVal
+import akka.actor.{ActorRef, Address, AddressFromURIString, ExtendedActorSystem}
+import akka.remote.TraceContextAwareWireFormats.{AckAndTraceContextAwareEnvelopeContainer, RemoteTraceContext, TraceContextAwareRemoteEnvelope}
 import akka.remote.WireFormats._
-import akka.remote.instrumentation.TraceContextAwareWireFormats.{AckAndTraceContextAwareEnvelopeContainer, RemoteTraceContext, TraceContextAwareRemoteEnvelope}
 import akka.remote.{Ack, RemoteActorRefProvider, SeqNo}
 import akka.util.ByteString
 import kamon.Kamon
 import kamon.akka.RemotingMetrics
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation._
-
-import scala.util.Try
 
 @Aspect
 class RemotingInstrumentation {

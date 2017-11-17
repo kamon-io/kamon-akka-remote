@@ -5,15 +5,15 @@ package akka.remote.instrumentation;
 
 public final class TraceContextAwareWireFormats {
   private TraceContextAwareWireFormats() {}
-
-  public static void registerAllExtensions(akka.protobuf.ExtensionRegistry registry) {
+  public static void registerAllExtensions(
+      akka.protobuf.ExtensionRegistry registry) {
   }
   public interface AckAndTraceContextAwareEnvelopeContainerOrBuilder
-          extends akka.protobuf.MessageOrBuilder {
+      extends akka.protobuf.MessageOrBuilder {
 
     // optional .AcknowledgementInfo ack = 1;
     /**
-     * <code>optional .AcknowledgementInfo ack = ``;</code>
+     * <code>optional .AcknowledgementInfo ack = 1;</code>
      */
     boolean hasAck();
     /**
@@ -43,8 +43,8 @@ public final class TraceContextAwareWireFormats {
    * Protobuf type {@code AckAndTraceContextAwareEnvelopeContainer}
    */
   public static final class AckAndTraceContextAwareEnvelopeContainer extends
-          akka.protobuf.GeneratedMessage
-          implements AckAndTraceContextAwareEnvelopeContainerOrBuilder {
+      akka.protobuf.GeneratedMessage
+      implements AckAndTraceContextAwareEnvelopeContainerOrBuilder {
     // Use AckAndTraceContextAwareEnvelopeContainer.newBuilder() to construct.
     private AckAndTraceContextAwareEnvelopeContainer(akka.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -64,16 +64,17 @@ public final class TraceContextAwareWireFormats {
     private final akka.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final akka.protobuf.UnknownFieldSet
-    getUnknownFields() {
+        getUnknownFields() {
       return this.unknownFields;
     }
     private AckAndTraceContextAwareEnvelopeContainer(
-            akka.protobuf.CodedInputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.CodedInputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       initFields();
       int mutable_bitField0_ = 0;
-      akka.protobuf.UnknownFieldSet.Builder unknownFields =  akka.protobuf.UnknownFieldSet.newBuilder();
+      akka.protobuf.UnknownFieldSet.Builder unknownFields =
+          akka.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -84,7 +85,7 @@ public final class TraceContextAwareWireFormats {
               break;
             default: {
               if (!parseUnknownField(input, unknownFields,
-                      extensionRegistry, tag)) {
+                                     extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -121,33 +122,33 @@ public final class TraceContextAwareWireFormats {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new akka.protobuf.InvalidProtocolBufferException(
-                e.getMessage()).setUnfinishedMessage(this);
+            e.getMessage()).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final akka.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor;
     }
 
     protected akka.protobuf.GeneratedMessage.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_AckAndTraceContextAwareEnvelopeContainer_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.class, akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.Builder.class);
+          .ensureFieldAccessorsInitialized(
+              akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.class, akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.Builder.class);
     }
 
     public static akka.protobuf.Parser<AckAndTraceContextAwareEnvelopeContainer> PARSER =
-            new akka.protobuf.AbstractParser<AckAndTraceContextAwareEnvelopeContainer>() {
-              public AckAndTraceContextAwareEnvelopeContainer parsePartialFrom(
-                      akka.protobuf.CodedInputStream input,
-                      akka.protobuf.ExtensionRegistryLite extensionRegistry)
-                      throws akka.protobuf.InvalidProtocolBufferException {
-                return new AckAndTraceContextAwareEnvelopeContainer(input, extensionRegistry);
-              }
-            };
+        new akka.protobuf.AbstractParser<AckAndTraceContextAwareEnvelopeContainer>() {
+      public AckAndTraceContextAwareEnvelopeContainer parsePartialFrom(
+          akka.protobuf.CodedInputStream input,
+          akka.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws akka.protobuf.InvalidProtocolBufferException {
+        return new AckAndTraceContextAwareEnvelopeContainer(input, extensionRegistry);
+      }
+    };
 
     @java.lang.Override
     public akka.protobuf.Parser<AckAndTraceContextAwareEnvelopeContainer> getParserForType() {
@@ -225,7 +226,7 @@ public final class TraceContextAwareWireFormats {
     }
 
     public void writeTo(akka.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeMessage(1, ack_);
@@ -244,11 +245,11 @@ public final class TraceContextAwareWireFormats {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += akka.protobuf.CodedOutputStream
-                .computeMessageSize(1, ack_);
+          .computeMessageSize(1, ack_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += akka.protobuf.CodedOutputStream
-                .computeMessageSize(2, envelope_);
+          .computeMessageSize(2, envelope_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -258,60 +259,60 @@ public final class TraceContextAwareWireFormats {
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
-            throws java.io.ObjectStreamException {
+        throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(
-            akka.protobuf.ByteString data)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.ByteString data)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(
-            akka.protobuf.ByteString data,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.ByteString data,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(byte[] data)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(
-            byte[] data,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        byte[] data,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(
-            java.io.InputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseDelimitedFrom(
-            java.io.InputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(
-            akka.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+        akka.protobuf.CodedInputStream input)
+        throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parseFrom(
-            akka.protobuf.CodedInputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        akka.protobuf.CodedInputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
 
@@ -324,7 +325,7 @@ public final class TraceContextAwareWireFormats {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-            akka.protobuf.GeneratedMessage.BuilderParent parent) {
+        akka.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -332,18 +333,18 @@ public final class TraceContextAwareWireFormats {
      * Protobuf type {@code AckAndTraceContextAwareEnvelopeContainer}
      */
     public static final class Builder extends
-            akka.protobuf.GeneratedMessage.Builder<Builder>
-            implements akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainerOrBuilder {
+        akka.protobuf.GeneratedMessage.Builder<Builder>
+       implements akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainerOrBuilder {
       public static final akka.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor;
       }
 
       protected akka.protobuf.GeneratedMessage.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_AckAndTraceContextAwareEnvelopeContainer_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.class, akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.Builder.class);
+            .ensureFieldAccessorsInitialized(
+                akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.class, akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.Builder.class);
       }
 
       // Construct using akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer.newBuilder()
@@ -352,7 +353,7 @@ public final class TraceContextAwareWireFormats {
       }
 
       private Builder(
-              akka.protobuf.GeneratedMessage.BuilderParent parent) {
+          akka.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -388,7 +389,7 @@ public final class TraceContextAwareWireFormats {
       }
 
       public akka.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor;
       }
 
@@ -453,13 +454,13 @@ public final class TraceContextAwareWireFormats {
       public final boolean isInitialized() {
         if (hasAck()) {
           if (!getAck().isInitialized()) {
-
+            
             return false;
           }
         }
         if (hasEnvelope()) {
           if (!getEnvelope().isInitialized()) {
-
+            
             return false;
           }
         }
@@ -467,9 +468,9 @@ public final class TraceContextAwareWireFormats {
       }
 
       public Builder mergeFrom(
-              akka.protobuf.CodedInputStream input,
-              akka.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          akka.protobuf.CodedInputStream input,
+          akka.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         akka.remote.instrumentation.TraceContextAwareWireFormats.AckAndTraceContextAwareEnvelopeContainer parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -488,7 +489,7 @@ public final class TraceContextAwareWireFormats {
       // optional .AcknowledgementInfo ack = 1;
       private akka.remote.WireFormats.AcknowledgementInfo ack_ = akka.remote.WireFormats.AcknowledgementInfo.getDefaultInstance();
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.AcknowledgementInfo, akka.remote.WireFormats.AcknowledgementInfo.Builder, akka.remote.WireFormats.AcknowledgementInfoOrBuilder> ackBuilder_;
+          akka.remote.WireFormats.AcknowledgementInfo, akka.remote.WireFormats.AcknowledgementInfo.Builder, akka.remote.WireFormats.AcknowledgementInfoOrBuilder> ackBuilder_;
       /**
        * <code>optional .AcknowledgementInfo ack = 1;</code>
        */
@@ -525,7 +526,7 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .AcknowledgementInfo ack = 1;</code>
        */
       public Builder setAck(
-              akka.remote.WireFormats.AcknowledgementInfo.Builder builderForValue) {
+          akka.remote.WireFormats.AcknowledgementInfo.Builder builderForValue) {
         if (ackBuilder_ == null) {
           ack_ = builderForValue.build();
           onChanged();
@@ -541,9 +542,9 @@ public final class TraceContextAwareWireFormats {
       public Builder mergeAck(akka.remote.WireFormats.AcknowledgementInfo value) {
         if (ackBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-                  ack_ != akka.remote.WireFormats.AcknowledgementInfo.getDefaultInstance()) {
+              ack_ != akka.remote.WireFormats.AcknowledgementInfo.getDefaultInstance()) {
             ack_ =
-                    akka.remote.WireFormats.AcknowledgementInfo.newBuilder(ack_).mergeFrom(value).buildPartial();
+              akka.remote.WireFormats.AcknowledgementInfo.newBuilder(ack_).mergeFrom(value).buildPartial();
           } else {
             ack_ = value;
           }
@@ -589,11 +590,11 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .AcknowledgementInfo ack = 1;</code>
        */
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.AcknowledgementInfo, akka.remote.WireFormats.AcknowledgementInfo.Builder, akka.remote.WireFormats.AcknowledgementInfoOrBuilder>
-      getAckFieldBuilder() {
+          akka.remote.WireFormats.AcknowledgementInfo, akka.remote.WireFormats.AcknowledgementInfo.Builder, akka.remote.WireFormats.AcknowledgementInfoOrBuilder> 
+          getAckFieldBuilder() {
         if (ackBuilder_ == null) {
           ackBuilder_ = new akka.protobuf.SingleFieldBuilder<
-                  akka.remote.WireFormats.AcknowledgementInfo, akka.remote.WireFormats.AcknowledgementInfo.Builder, akka.remote.WireFormats.AcknowledgementInfoOrBuilder>(
+              akka.remote.WireFormats.AcknowledgementInfo, akka.remote.WireFormats.AcknowledgementInfo.Builder, akka.remote.WireFormats.AcknowledgementInfoOrBuilder>(
                   ack_,
                   getParentForChildren(),
                   isClean());
@@ -605,7 +606,7 @@ public final class TraceContextAwareWireFormats {
       // optional .TraceContextAwareRemoteEnvelope envelope = 2;
       private akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope envelope_ = akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.getDefaultInstance();
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder> envelopeBuilder_;
+          akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder> envelopeBuilder_;
       /**
        * <code>optional .TraceContextAwareRemoteEnvelope envelope = 2;</code>
        */
@@ -642,7 +643,7 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .TraceContextAwareRemoteEnvelope envelope = 2;</code>
        */
       public Builder setEnvelope(
-              akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder builderForValue) {
+          akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder builderForValue) {
         if (envelopeBuilder_ == null) {
           envelope_ = builderForValue.build();
           onChanged();
@@ -658,9 +659,9 @@ public final class TraceContextAwareWireFormats {
       public Builder mergeEnvelope(akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope value) {
         if (envelopeBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-                  envelope_ != akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.getDefaultInstance()) {
+              envelope_ != akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.getDefaultInstance()) {
             envelope_ =
-                    akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.newBuilder(envelope_).mergeFrom(value).buildPartial();
+              akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.newBuilder(envelope_).mergeFrom(value).buildPartial();
           } else {
             envelope_ = value;
           }
@@ -706,11 +707,11 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .TraceContextAwareRemoteEnvelope envelope = 2;</code>
        */
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder>
-      getEnvelopeFieldBuilder() {
+          akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder> 
+          getEnvelopeFieldBuilder() {
         if (envelopeBuilder_ == null) {
           envelopeBuilder_ = new akka.protobuf.SingleFieldBuilder<
-                  akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder>(
+              akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder>(
                   envelope_,
                   getParentForChildren(),
                   isClean());
@@ -731,7 +732,7 @@ public final class TraceContextAwareWireFormats {
   }
 
   public interface TraceContextAwareRemoteEnvelopeOrBuilder
-          extends akka.protobuf.MessageOrBuilder {
+      extends akka.protobuf.MessageOrBuilder {
 
     // required .ActorRefData recipient = 1;
     /**
@@ -803,8 +804,8 @@ public final class TraceContextAwareWireFormats {
    * Protobuf type {@code TraceContextAwareRemoteEnvelope}
    */
   public static final class TraceContextAwareRemoteEnvelope extends
-          akka.protobuf.GeneratedMessage
-          implements TraceContextAwareRemoteEnvelopeOrBuilder {
+      akka.protobuf.GeneratedMessage
+      implements TraceContextAwareRemoteEnvelopeOrBuilder {
     // Use TraceContextAwareRemoteEnvelope.newBuilder() to construct.
     private TraceContextAwareRemoteEnvelope(akka.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -824,17 +825,17 @@ public final class TraceContextAwareWireFormats {
     private final akka.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final akka.protobuf.UnknownFieldSet
-    getUnknownFields() {
+        getUnknownFields() {
       return this.unknownFields;
     }
     private TraceContextAwareRemoteEnvelope(
-            akka.protobuf.CodedInputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.CodedInputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       initFields();
       int mutable_bitField0_ = 0;
       akka.protobuf.UnknownFieldSet.Builder unknownFields =
-              akka.protobuf.UnknownFieldSet.newBuilder();
+          akka.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -845,7 +846,7 @@ public final class TraceContextAwareWireFormats {
               break;
             default: {
               if (!parseUnknownField(input, unknownFields,
-                      extensionRegistry, tag)) {
+                                     extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -913,33 +914,33 @@ public final class TraceContextAwareWireFormats {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new akka.protobuf.InvalidProtocolBufferException(
-                e.getMessage()).setUnfinishedMessage(this);
+            e.getMessage()).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final akka.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_TraceContextAwareRemoteEnvelope_descriptor;
     }
 
     protected akka.protobuf.GeneratedMessage.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_TraceContextAwareRemoteEnvelope_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.class, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder.class);
+          .ensureFieldAccessorsInitialized(
+              akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.class, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder.class);
     }
 
     public static akka.protobuf.Parser<TraceContextAwareRemoteEnvelope> PARSER =
-            new akka.protobuf.AbstractParser<TraceContextAwareRemoteEnvelope>() {
-              public TraceContextAwareRemoteEnvelope parsePartialFrom(
-                      akka.protobuf.CodedInputStream input,
-                      akka.protobuf.ExtensionRegistryLite extensionRegistry)
-                      throws akka.protobuf.InvalidProtocolBufferException {
-                return new TraceContextAwareRemoteEnvelope(input, extensionRegistry);
-              }
-            };
+        new akka.protobuf.AbstractParser<TraceContextAwareRemoteEnvelope>() {
+      public TraceContextAwareRemoteEnvelope parsePartialFrom(
+          akka.protobuf.CodedInputStream input,
+          akka.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws akka.protobuf.InvalidProtocolBufferException {
+        return new TraceContextAwareRemoteEnvelope(input, extensionRegistry);
+      }
+    };
 
     @java.lang.Override
     public akka.protobuf.Parser<TraceContextAwareRemoteEnvelope> getParserForType() {
@@ -1096,7 +1097,7 @@ public final class TraceContextAwareWireFormats {
     }
 
     public void writeTo(akka.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         output.writeMessage(1, recipient_);
@@ -1124,23 +1125,23 @@ public final class TraceContextAwareWireFormats {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += akka.protobuf.CodedOutputStream
-                .computeMessageSize(1, recipient_);
+          .computeMessageSize(1, recipient_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += akka.protobuf.CodedOutputStream
-                .computeMessageSize(2, message_);
+          .computeMessageSize(2, message_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += akka.protobuf.CodedOutputStream
-                .computeMessageSize(4, sender_);
+          .computeMessageSize(4, sender_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += akka.protobuf.CodedOutputStream
-                .computeFixed64Size(5, seq_);
+          .computeFixed64Size(5, seq_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += akka.protobuf.CodedOutputStream
-                .computeMessageSize(15, traceContext_);
+          .computeMessageSize(15, traceContext_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1150,60 +1151,60 @@ public final class TraceContextAwareWireFormats {
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
-            throws java.io.ObjectStreamException {
+        throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(
-            akka.protobuf.ByteString data)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.ByteString data)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(
-            akka.protobuf.ByteString data,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.ByteString data,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(byte[] data)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(
-            byte[] data,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        byte[] data,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(
-            java.io.InputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseDelimitedFrom(
-            java.io.InputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(
-            akka.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+        akka.protobuf.CodedInputStream input)
+        throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parseFrom(
-            akka.protobuf.CodedInputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        akka.protobuf.CodedInputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
 
@@ -1216,7 +1217,7 @@ public final class TraceContextAwareWireFormats {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-            akka.protobuf.GeneratedMessage.BuilderParent parent) {
+        akka.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -1224,18 +1225,18 @@ public final class TraceContextAwareWireFormats {
      * Protobuf type {@code TraceContextAwareRemoteEnvelope}
      */
     public static final class Builder extends
-            akka.protobuf.GeneratedMessage.Builder<Builder>
-            implements akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder {
+        akka.protobuf.GeneratedMessage.Builder<Builder>
+       implements akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelopeOrBuilder {
       public static final akka.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_TraceContextAwareRemoteEnvelope_descriptor;
       }
 
       protected akka.protobuf.GeneratedMessage.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_TraceContextAwareRemoteEnvelope_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.class, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder.class);
+            .ensureFieldAccessorsInitialized(
+                akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.class, akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.Builder.class);
       }
 
       // Construct using akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope.newBuilder()
@@ -1244,7 +1245,7 @@ public final class TraceContextAwareWireFormats {
       }
 
       private Builder(
-              akka.protobuf.GeneratedMessage.BuilderParent parent) {
+          akka.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -1296,7 +1297,7 @@ public final class TraceContextAwareWireFormats {
       }
 
       public akka.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_TraceContextAwareRemoteEnvelope_descriptor;
       }
 
@@ -1389,30 +1390,30 @@ public final class TraceContextAwareWireFormats {
 
       public final boolean isInitialized() {
         if (!hasRecipient()) {
-
+          
           return false;
         }
         if (!hasMessage()) {
-
+          
           return false;
         }
         if (!getRecipient().isInitialized()) {
-
+          
           return false;
         }
         if (!getMessage().isInitialized()) {
-
+          
           return false;
         }
         if (hasSender()) {
           if (!getSender().isInitialized()) {
-
+            
             return false;
           }
         }
         if (hasTraceContext()) {
           if (!getTraceContext().isInitialized()) {
-
+            
             return false;
           }
         }
@@ -1420,9 +1421,9 @@ public final class TraceContextAwareWireFormats {
       }
 
       public Builder mergeFrom(
-              akka.protobuf.CodedInputStream input,
-              akka.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          akka.protobuf.CodedInputStream input,
+          akka.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         akka.remote.instrumentation.TraceContextAwareWireFormats.TraceContextAwareRemoteEnvelope parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -1441,7 +1442,7 @@ public final class TraceContextAwareWireFormats {
       // required .ActorRefData recipient = 1;
       private akka.remote.WireFormats.ActorRefData recipient_ = akka.remote.WireFormats.ActorRefData.getDefaultInstance();
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder> recipientBuilder_;
+          akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder> recipientBuilder_;
       /**
        * <code>required .ActorRefData recipient = 1;</code>
        */
@@ -1478,7 +1479,7 @@ public final class TraceContextAwareWireFormats {
        * <code>required .ActorRefData recipient = 1;</code>
        */
       public Builder setRecipient(
-              akka.remote.WireFormats.ActorRefData.Builder builderForValue) {
+          akka.remote.WireFormats.ActorRefData.Builder builderForValue) {
         if (recipientBuilder_ == null) {
           recipient_ = builderForValue.build();
           onChanged();
@@ -1494,9 +1495,9 @@ public final class TraceContextAwareWireFormats {
       public Builder mergeRecipient(akka.remote.WireFormats.ActorRefData value) {
         if (recipientBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001) &&
-                  recipient_ != akka.remote.WireFormats.ActorRefData.getDefaultInstance()) {
+              recipient_ != akka.remote.WireFormats.ActorRefData.getDefaultInstance()) {
             recipient_ =
-                    akka.remote.WireFormats.ActorRefData.newBuilder(recipient_).mergeFrom(value).buildPartial();
+              akka.remote.WireFormats.ActorRefData.newBuilder(recipient_).mergeFrom(value).buildPartial();
           } else {
             recipient_ = value;
           }
@@ -1542,11 +1543,11 @@ public final class TraceContextAwareWireFormats {
        * <code>required .ActorRefData recipient = 1;</code>
        */
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder>
-      getRecipientFieldBuilder() {
+          akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder> 
+          getRecipientFieldBuilder() {
         if (recipientBuilder_ == null) {
           recipientBuilder_ = new akka.protobuf.SingleFieldBuilder<
-                  akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder>(
+              akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder>(
                   recipient_,
                   getParentForChildren(),
                   isClean());
@@ -1558,7 +1559,7 @@ public final class TraceContextAwareWireFormats {
       // required .SerializedMessage message = 2;
       private akka.remote.WireFormats.SerializedMessage message_ = akka.remote.WireFormats.SerializedMessage.getDefaultInstance();
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.SerializedMessage, akka.remote.WireFormats.SerializedMessage.Builder, akka.remote.WireFormats.SerializedMessageOrBuilder> messageBuilder_;
+          akka.remote.WireFormats.SerializedMessage, akka.remote.WireFormats.SerializedMessage.Builder, akka.remote.WireFormats.SerializedMessageOrBuilder> messageBuilder_;
       /**
        * <code>required .SerializedMessage message = 2;</code>
        */
@@ -1595,7 +1596,7 @@ public final class TraceContextAwareWireFormats {
        * <code>required .SerializedMessage message = 2;</code>
        */
       public Builder setMessage(
-              akka.remote.WireFormats.SerializedMessage.Builder builderForValue) {
+          akka.remote.WireFormats.SerializedMessage.Builder builderForValue) {
         if (messageBuilder_ == null) {
           message_ = builderForValue.build();
           onChanged();
@@ -1611,9 +1612,9 @@ public final class TraceContextAwareWireFormats {
       public Builder mergeMessage(akka.remote.WireFormats.SerializedMessage value) {
         if (messageBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-                  message_ != akka.remote.WireFormats.SerializedMessage.getDefaultInstance()) {
+              message_ != akka.remote.WireFormats.SerializedMessage.getDefaultInstance()) {
             message_ =
-                    akka.remote.WireFormats.SerializedMessage.newBuilder(message_).mergeFrom(value).buildPartial();
+              akka.remote.WireFormats.SerializedMessage.newBuilder(message_).mergeFrom(value).buildPartial();
           } else {
             message_ = value;
           }
@@ -1659,11 +1660,11 @@ public final class TraceContextAwareWireFormats {
        * <code>required .SerializedMessage message = 2;</code>
        */
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.SerializedMessage, akka.remote.WireFormats.SerializedMessage.Builder, akka.remote.WireFormats.SerializedMessageOrBuilder>
-      getMessageFieldBuilder() {
+          akka.remote.WireFormats.SerializedMessage, akka.remote.WireFormats.SerializedMessage.Builder, akka.remote.WireFormats.SerializedMessageOrBuilder> 
+          getMessageFieldBuilder() {
         if (messageBuilder_ == null) {
           messageBuilder_ = new akka.protobuf.SingleFieldBuilder<
-                  akka.remote.WireFormats.SerializedMessage, akka.remote.WireFormats.SerializedMessage.Builder, akka.remote.WireFormats.SerializedMessageOrBuilder>(
+              akka.remote.WireFormats.SerializedMessage, akka.remote.WireFormats.SerializedMessage.Builder, akka.remote.WireFormats.SerializedMessageOrBuilder>(
                   message_,
                   getParentForChildren(),
                   isClean());
@@ -1675,7 +1676,7 @@ public final class TraceContextAwareWireFormats {
       // optional .ActorRefData sender = 4;
       private akka.remote.WireFormats.ActorRefData sender_ = akka.remote.WireFormats.ActorRefData.getDefaultInstance();
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder> senderBuilder_;
+          akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder> senderBuilder_;
       /**
        * <code>optional .ActorRefData sender = 4;</code>
        */
@@ -1712,7 +1713,7 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .ActorRefData sender = 4;</code>
        */
       public Builder setSender(
-              akka.remote.WireFormats.ActorRefData.Builder builderForValue) {
+          akka.remote.WireFormats.ActorRefData.Builder builderForValue) {
         if (senderBuilder_ == null) {
           sender_ = builderForValue.build();
           onChanged();
@@ -1728,9 +1729,9 @@ public final class TraceContextAwareWireFormats {
       public Builder mergeSender(akka.remote.WireFormats.ActorRefData value) {
         if (senderBuilder_ == null) {
           if (((bitField0_ & 0x00000004) == 0x00000004) &&
-                  sender_ != akka.remote.WireFormats.ActorRefData.getDefaultInstance()) {
+              sender_ != akka.remote.WireFormats.ActorRefData.getDefaultInstance()) {
             sender_ =
-                    akka.remote.WireFormats.ActorRefData.newBuilder(sender_).mergeFrom(value).buildPartial();
+              akka.remote.WireFormats.ActorRefData.newBuilder(sender_).mergeFrom(value).buildPartial();
           } else {
             sender_ = value;
           }
@@ -1776,11 +1777,11 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .ActorRefData sender = 4;</code>
        */
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder>
-      getSenderFieldBuilder() {
+          akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder> 
+          getSenderFieldBuilder() {
         if (senderBuilder_ == null) {
           senderBuilder_ = new akka.protobuf.SingleFieldBuilder<
-                  akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder>(
+              akka.remote.WireFormats.ActorRefData, akka.remote.WireFormats.ActorRefData.Builder, akka.remote.WireFormats.ActorRefDataOrBuilder>(
                   sender_,
                   getParentForChildren(),
                   isClean());
@@ -1825,7 +1826,7 @@ public final class TraceContextAwareWireFormats {
       // optional .RemoteTraceContext traceContext = 15;
       private akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext traceContext_ = akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.getDefaultInstance();
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder> traceContextBuilder_;
+          akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder> traceContextBuilder_;
       /**
        * <code>optional .RemoteTraceContext traceContext = 15;</code>
        */
@@ -1862,7 +1863,7 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .RemoteTraceContext traceContext = 15;</code>
        */
       public Builder setTraceContext(
-              akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder builderForValue) {
+          akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder builderForValue) {
         if (traceContextBuilder_ == null) {
           traceContext_ = builderForValue.build();
           onChanged();
@@ -1878,9 +1879,9 @@ public final class TraceContextAwareWireFormats {
       public Builder mergeTraceContext(akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext value) {
         if (traceContextBuilder_ == null) {
           if (((bitField0_ & 0x00000010) == 0x00000010) &&
-                  traceContext_ != akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.getDefaultInstance()) {
+              traceContext_ != akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.getDefaultInstance()) {
             traceContext_ =
-                    akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.newBuilder(traceContext_).mergeFrom(value).buildPartial();
+              akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.newBuilder(traceContext_).mergeFrom(value).buildPartial();
           } else {
             traceContext_ = value;
           }
@@ -1926,11 +1927,11 @@ public final class TraceContextAwareWireFormats {
        * <code>optional .RemoteTraceContext traceContext = 15;</code>
        */
       private akka.protobuf.SingleFieldBuilder<
-              akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder>
-      getTraceContextFieldBuilder() {
+          akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder> 
+          getTraceContextFieldBuilder() {
         if (traceContextBuilder_ == null) {
           traceContextBuilder_ = new akka.protobuf.SingleFieldBuilder<
-                  akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder>(
+              akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder>(
                   traceContext_,
                   getParentForChildren(),
                   isClean());
@@ -1951,64 +1952,24 @@ public final class TraceContextAwareWireFormats {
   }
 
   public interface RemoteTraceContextOrBuilder
-          extends akka.protobuf.MessageOrBuilder {
+      extends akka.protobuf.MessageOrBuilder {
 
-    // required string traceName = 1;
+    // required bytes context = 1;
     /**
-     * <code>required string traceName = 1;</code>
+     * <code>required bytes context = 1;</code>
      */
-    boolean hasTraceName();
+    boolean hasContext();
     /**
-     * <code>required string traceName = 1;</code>
+     * <code>required bytes context = 1;</code>
      */
-    java.lang.String getTraceName();
-    /**
-     * <code>required string traceName = 1;</code>
-     */
-    akka.protobuf.ByteString
-    getTraceNameBytes();
-
-    // required string traceToken = 2;
-    /**
-     * <code>required string traceToken = 2;</code>
-     */
-    boolean hasTraceToken();
-    /**
-     * <code>required string traceToken = 2;</code>
-     */
-    java.lang.String getTraceToken();
-    /**
-     * <code>required string traceToken = 2;</code>
-     */
-    akka.protobuf.ByteString
-    getTraceTokenBytes();
-
-    // required bool isOpen = 3;
-    /**
-     * <code>required bool isOpen = 3;</code>
-     */
-    boolean hasIsOpen();
-    /**
-     * <code>required bool isOpen = 3;</code>
-     */
-    boolean getIsOpen();
-
-    // required fixed64 startMilliTime = 4;
-    /**
-     * <code>required fixed64 startMilliTime = 4;</code>
-     */
-    boolean hasStartMilliTime();
-    /**
-     * <code>required fixed64 startMilliTime = 4;</code>
-     */
-    long getStartMilliTime();
+    akka.protobuf.ByteString getContext();
   }
   /**
    * Protobuf type {@code RemoteTraceContext}
    */
   public static final class RemoteTraceContext extends
-          akka.protobuf.GeneratedMessage
-          implements RemoteTraceContextOrBuilder {
+      akka.protobuf.GeneratedMessage
+      implements RemoteTraceContextOrBuilder {
     // Use RemoteTraceContext.newBuilder() to construct.
     private RemoteTraceContext(akka.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
@@ -2028,17 +1989,17 @@ public final class TraceContextAwareWireFormats {
     private final akka.protobuf.UnknownFieldSet unknownFields;
     @java.lang.Override
     public final akka.protobuf.UnknownFieldSet
-    getUnknownFields() {
+        getUnknownFields() {
       return this.unknownFields;
     }
     private RemoteTraceContext(
-            akka.protobuf.CodedInputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.CodedInputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       initFields();
       int mutable_bitField0_ = 0;
       akka.protobuf.UnknownFieldSet.Builder unknownFields =
-              akka.protobuf.UnknownFieldSet.newBuilder();
+          akka.protobuf.UnknownFieldSet.newBuilder();
       try {
         boolean done = false;
         while (!done) {
@@ -2049,29 +2010,14 @@ public final class TraceContextAwareWireFormats {
               break;
             default: {
               if (!parseUnknownField(input, unknownFields,
-                      extensionRegistry, tag)) {
+                                     extensionRegistry, tag)) {
                 done = true;
               }
               break;
             }
             case 10: {
               bitField0_ |= 0x00000001;
-              traceName_ = input.readBytes();
-              break;
-            }
-            case 18: {
-              bitField0_ |= 0x00000002;
-              traceToken_ = input.readBytes();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              isOpen_ = input.readBool();
-              break;
-            }
-            case 33: {
-              bitField0_ |= 0x00000008;
-              startMilliTime_ = input.readFixed64();
+              context_ = input.readBytes();
               break;
             }
           }
@@ -2080,33 +2026,33 @@ public final class TraceContextAwareWireFormats {
         throw e.setUnfinishedMessage(this);
       } catch (java.io.IOException e) {
         throw new akka.protobuf.InvalidProtocolBufferException(
-                e.getMessage()).setUnfinishedMessage(this);
+            e.getMessage()).setUnfinishedMessage(this);
       } finally {
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
     }
     public static final akka.protobuf.Descriptors.Descriptor
-    getDescriptor() {
+        getDescriptor() {
       return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_RemoteTraceContext_descriptor;
     }
 
     protected akka.protobuf.GeneratedMessage.FieldAccessorTable
-    internalGetFieldAccessorTable() {
+        internalGetFieldAccessorTable() {
       return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_RemoteTraceContext_fieldAccessorTable
-              .ensureFieldAccessorsInitialized(
-                      akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.class, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder.class);
+          .ensureFieldAccessorsInitialized(
+              akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.class, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder.class);
     }
 
     public static akka.protobuf.Parser<RemoteTraceContext> PARSER =
-            new akka.protobuf.AbstractParser<RemoteTraceContext>() {
-              public RemoteTraceContext parsePartialFrom(
-                      akka.protobuf.CodedInputStream input,
-                      akka.protobuf.ExtensionRegistryLite extensionRegistry)
-                      throws akka.protobuf.InvalidProtocolBufferException {
-                return new RemoteTraceContext(input, extensionRegistry);
-              }
-            };
+        new akka.protobuf.AbstractParser<RemoteTraceContext>() {
+      public RemoteTraceContext parsePartialFrom(
+          akka.protobuf.CodedInputStream input,
+          akka.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws akka.protobuf.InvalidProtocolBufferException {
+        return new RemoteTraceContext(input, extensionRegistry);
+      }
+    };
 
     @java.lang.Override
     public akka.protobuf.Parser<RemoteTraceContext> getParserForType() {
@@ -2114,148 +2060,31 @@ public final class TraceContextAwareWireFormats {
     }
 
     private int bitField0_;
-    // required string traceName = 1;
-    public static final int TRACENAME_FIELD_NUMBER = 1;
-    private java.lang.Object traceName_;
+    // required bytes context = 1;
+    public static final int CONTEXT_FIELD_NUMBER = 1;
+    private akka.protobuf.ByteString context_;
     /**
-     * <code>required string traceName = 1;</code>
+     * <code>required bytes context = 1;</code>
      */
-    public boolean hasTraceName() {
+    public boolean hasContext() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required string traceName = 1;</code>
+     * <code>required bytes context = 1;</code>
      */
-    public java.lang.String getTraceName() {
-      java.lang.Object ref = traceName_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        akka.protobuf.ByteString bs =
-                (akka.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          traceName_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string traceName = 1;</code>
-     */
-    public akka.protobuf.ByteString
-    getTraceNameBytes() {
-      java.lang.Object ref = traceName_;
-      if (ref instanceof java.lang.String) {
-        akka.protobuf.ByteString b =
-                akka.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
-        traceName_ = b;
-        return b;
-      } else {
-        return (akka.protobuf.ByteString) ref;
-      }
-    }
-
-    // required string traceToken = 2;
-    public static final int TRACETOKEN_FIELD_NUMBER = 2;
-    private java.lang.Object traceToken_;
-    /**
-     * <code>required string traceToken = 2;</code>
-     */
-    public boolean hasTraceToken() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>required string traceToken = 2;</code>
-     */
-    public java.lang.String getTraceToken() {
-      java.lang.Object ref = traceToken_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        akka.protobuf.ByteString bs =
-                (akka.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          traceToken_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>required string traceToken = 2;</code>
-     */
-    public akka.protobuf.ByteString
-    getTraceTokenBytes() {
-      java.lang.Object ref = traceToken_;
-      if (ref instanceof java.lang.String) {
-        akka.protobuf.ByteString b =
-                akka.protobuf.ByteString.copyFromUtf8(
-                        (java.lang.String) ref);
-        traceToken_ = b;
-        return b;
-      } else {
-        return (akka.protobuf.ByteString) ref;
-      }
-    }
-
-    // required bool isOpen = 3;
-    public static final int ISOPEN_FIELD_NUMBER = 3;
-    private boolean isOpen_;
-    /**
-     * <code>required bool isOpen = 3;</code>
-     */
-    public boolean hasIsOpen() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>required bool isOpen = 3;</code>
-     */
-    public boolean getIsOpen() {
-      return isOpen_;
-    }
-
-    // required fixed64 startMilliTime = 4;
-    public static final int STARTMILLITIME_FIELD_NUMBER = 4;
-    private long startMilliTime_;
-    /**
-     * <code>required fixed64 startMilliTime = 4;</code>
-     */
-    public boolean hasStartMilliTime() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>required fixed64 startMilliTime = 4;</code>
-     */
-    public long getStartMilliTime() {
-      return startMilliTime_;
+    public akka.protobuf.ByteString getContext() {
+      return context_;
     }
 
     private void initFields() {
-      traceName_ = "";
-      traceToken_ = "";
-      isOpen_ = false;
-      startMilliTime_ = 0L;
+      context_ = akka.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasTraceName()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasTraceToken()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasIsOpen()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasStartMilliTime()) {
+      if (!hasContext()) {
         memoizedIsInitialized = 0;
         return false;
       }
@@ -2264,19 +2093,10 @@ public final class TraceContextAwareWireFormats {
     }
 
     public void writeTo(akka.protobuf.CodedOutputStream output)
-            throws java.io.IOException {
+                        throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, getTraceNameBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getTraceTokenBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBool(3, isOpen_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeFixed64(4, startMilliTime_);
+        output.writeBytes(1, context_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2289,19 +2109,7 @@ public final class TraceContextAwareWireFormats {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += akka.protobuf.CodedOutputStream
-                .computeBytesSize(1, getTraceNameBytes());
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += akka.protobuf.CodedOutputStream
-                .computeBytesSize(2, getTraceTokenBytes());
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += akka.protobuf.CodedOutputStream
-                .computeBoolSize(3, isOpen_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += akka.protobuf.CodedOutputStream
-                .computeFixed64Size(4, startMilliTime_);
+          .computeBytesSize(1, context_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2311,60 +2119,60 @@ public final class TraceContextAwareWireFormats {
     private static final long serialVersionUID = 0L;
     @java.lang.Override
     protected java.lang.Object writeReplace()
-            throws java.io.ObjectStreamException {
+        throws java.io.ObjectStreamException {
       return super.writeReplace();
     }
 
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(
-            akka.protobuf.ByteString data)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.ByteString data)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(
-            akka.protobuf.ByteString data,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        akka.protobuf.ByteString data,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(byte[] data)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(
-            byte[] data,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws akka.protobuf.InvalidProtocolBufferException {
+        byte[] data,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws akka.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(
-            java.io.InputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseDelimitedFrom(java.io.InputStream input)
-            throws java.io.IOException {
+        throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseDelimitedFrom(
-            java.io.InputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        java.io.InputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(
-            akka.protobuf.CodedInputStream input)
-            throws java.io.IOException {
+        akka.protobuf.CodedInputStream input)
+        throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
     public static akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parseFrom(
-            akka.protobuf.CodedInputStream input,
-            akka.protobuf.ExtensionRegistryLite extensionRegistry)
-            throws java.io.IOException {
+        akka.protobuf.CodedInputStream input,
+        akka.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
 
@@ -2377,7 +2185,7 @@ public final class TraceContextAwareWireFormats {
 
     @java.lang.Override
     protected Builder newBuilderForType(
-            akka.protobuf.GeneratedMessage.BuilderParent parent) {
+        akka.protobuf.GeneratedMessage.BuilderParent parent) {
       Builder builder = new Builder(parent);
       return builder;
     }
@@ -2385,18 +2193,18 @@ public final class TraceContextAwareWireFormats {
      * Protobuf type {@code RemoteTraceContext}
      */
     public static final class Builder extends
-            akka.protobuf.GeneratedMessage.Builder<Builder>
-            implements akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder {
+        akka.protobuf.GeneratedMessage.Builder<Builder>
+       implements akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContextOrBuilder {
       public static final akka.protobuf.Descriptors.Descriptor
-      getDescriptor() {
+          getDescriptor() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_RemoteTraceContext_descriptor;
       }
 
       protected akka.protobuf.GeneratedMessage.FieldAccessorTable
-      internalGetFieldAccessorTable() {
+          internalGetFieldAccessorTable() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_RemoteTraceContext_fieldAccessorTable
-                .ensureFieldAccessorsInitialized(
-                        akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.class, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder.class);
+            .ensureFieldAccessorsInitialized(
+                akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.class, akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.Builder.class);
       }
 
       // Construct using akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.newBuilder()
@@ -2405,7 +2213,7 @@ public final class TraceContextAwareWireFormats {
       }
 
       private Builder(
-              akka.protobuf.GeneratedMessage.BuilderParent parent) {
+          akka.protobuf.GeneratedMessage.BuilderParent parent) {
         super(parent);
         maybeForceBuilderInitialization();
       }
@@ -2419,14 +2227,8 @@ public final class TraceContextAwareWireFormats {
 
       public Builder clear() {
         super.clear();
-        traceName_ = "";
+        context_ = akka.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
-        traceToken_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
-        isOpen_ = false;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        startMilliTime_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -2435,7 +2237,7 @@ public final class TraceContextAwareWireFormats {
       }
 
       public akka.protobuf.Descriptors.Descriptor
-      getDescriptorForType() {
+          getDescriptorForType() {
         return akka.remote.instrumentation.TraceContextAwareWireFormats.internal_static_RemoteTraceContext_descriptor;
       }
 
@@ -2458,19 +2260,7 @@ public final class TraceContextAwareWireFormats {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.traceName_ = traceName_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.traceToken_ = traceToken_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.isOpen_ = isOpen_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.startMilliTime_ = startMilliTime_;
+        result.context_ = context_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2487,50 +2277,25 @@ public final class TraceContextAwareWireFormats {
 
       public Builder mergeFrom(akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext other) {
         if (other == akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext.getDefaultInstance()) return this;
-        if (other.hasTraceName()) {
-          bitField0_ |= 0x00000001;
-          traceName_ = other.traceName_;
-          onChanged();
-        }
-        if (other.hasTraceToken()) {
-          bitField0_ |= 0x00000002;
-          traceToken_ = other.traceToken_;
-          onChanged();
-        }
-        if (other.hasIsOpen()) {
-          setIsOpen(other.getIsOpen());
-        }
-        if (other.hasStartMilliTime()) {
-          setStartMilliTime(other.getStartMilliTime());
+        if (other.hasContext()) {
+          setContext(other.getContext());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
 
       public final boolean isInitialized() {
-        if (!hasTraceName()) {
-
-          return false;
-        }
-        if (!hasTraceToken()) {
-
-          return false;
-        }
-        if (!hasIsOpen()) {
-
-          return false;
-        }
-        if (!hasStartMilliTime()) {
-
+        if (!hasContext()) {
+          
           return false;
         }
         return true;
       }
 
       public Builder mergeFrom(
-              akka.protobuf.CodedInputStream input,
-              akka.protobuf.ExtensionRegistryLite extensionRegistry)
-              throws java.io.IOException {
+          akka.protobuf.CodedInputStream input,
+          akka.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
         akka.remote.instrumentation.TraceContextAwareWireFormats.RemoteTraceContext parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
@@ -2546,216 +2311,38 @@ public final class TraceContextAwareWireFormats {
       }
       private int bitField0_;
 
-      // required string traceName = 1;
-      private java.lang.Object traceName_ = "";
+      // required bytes context = 1;
+      private akka.protobuf.ByteString context_ = akka.protobuf.ByteString.EMPTY;
       /**
-       * <code>required string traceName = 1;</code>
+       * <code>required bytes context = 1;</code>
        */
-      public boolean hasTraceName() {
+      public boolean hasContext() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required string traceName = 1;</code>
+       * <code>required bytes context = 1;</code>
        */
-      public java.lang.String getTraceName() {
-        java.lang.Object ref = traceName_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((akka.protobuf.ByteString) ref)
-                  .toStringUtf8();
-          traceName_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public akka.protobuf.ByteString getContext() {
+        return context_;
       }
       /**
-       * <code>required string traceName = 1;</code>
+       * <code>required bytes context = 1;</code>
        */
-      public akka.protobuf.ByteString
-      getTraceNameBytes() {
-        java.lang.Object ref = traceName_;
-        if (ref instanceof String) {
-          akka.protobuf.ByteString b =
-                  akka.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
-          traceName_ = b;
-          return b;
-        } else {
-          return (akka.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string traceName = 1;</code>
-       */
-      public Builder setTraceName(
-              java.lang.String value) {
+      public Builder setContext(akka.protobuf.ByteString value) {
         if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000001;
-        traceName_ = value;
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        context_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required string traceName = 1;</code>
+       * <code>required bytes context = 1;</code>
        */
-      public Builder clearTraceName() {
+      public Builder clearContext() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        traceName_ = getDefaultInstance().getTraceName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string traceName = 1;</code>
-       */
-      public Builder setTraceNameBytes(
-              akka.protobuf.ByteString value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000001;
-        traceName_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required string traceToken = 2;
-      private java.lang.Object traceToken_ = "";
-      /**
-       * <code>required string traceToken = 2;</code>
-       */
-      public boolean hasTraceToken() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>required string traceToken = 2;</code>
-       */
-      public java.lang.String getTraceToken() {
-        java.lang.Object ref = traceToken_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((akka.protobuf.ByteString) ref)
-                  .toStringUtf8();
-          traceToken_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>required string traceToken = 2;</code>
-       */
-      public akka.protobuf.ByteString
-      getTraceTokenBytes() {
-        java.lang.Object ref = traceToken_;
-        if (ref instanceof String) {
-          akka.protobuf.ByteString b =
-                  akka.protobuf.ByteString.copyFromUtf8(
-                          (java.lang.String) ref);
-          traceToken_ = b;
-          return b;
-        } else {
-          return (akka.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>required string traceToken = 2;</code>
-       */
-      public Builder setTraceToken(
-              java.lang.String value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000002;
-        traceToken_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string traceToken = 2;</code>
-       */
-      public Builder clearTraceToken() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        traceToken_ = getDefaultInstance().getTraceToken();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required string traceToken = 2;</code>
-       */
-      public Builder setTraceTokenBytes(
-              akka.protobuf.ByteString value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        bitField0_ |= 0x00000002;
-        traceToken_ = value;
-        onChanged();
-        return this;
-      }
-
-      // required bool isOpen = 3;
-      private boolean isOpen_ ;
-      /**
-       * <code>required bool isOpen = 3;</code>
-       */
-      public boolean hasIsOpen() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>required bool isOpen = 3;</code>
-       */
-      public boolean getIsOpen() {
-        return isOpen_;
-      }
-      /**
-       * <code>required bool isOpen = 3;</code>
-       */
-      public Builder setIsOpen(boolean value) {
-        bitField0_ |= 0x00000004;
-        isOpen_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required bool isOpen = 3;</code>
-       */
-      public Builder clearIsOpen() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        isOpen_ = false;
-        onChanged();
-        return this;
-      }
-
-      // required fixed64 startMilliTime = 4;
-      private long startMilliTime_ ;
-      /**
-       * <code>required fixed64 startMilliTime = 4;</code>
-       */
-      public boolean hasStartMilliTime() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>required fixed64 startMilliTime = 4;</code>
-       */
-      public long getStartMilliTime() {
-        return startMilliTime_;
-      }
-      /**
-       * <code>required fixed64 startMilliTime = 4;</code>
-       */
-      public Builder setStartMilliTime(long value) {
-        bitField0_ |= 0x00000008;
-        startMilliTime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>required fixed64 startMilliTime = 4;</code>
-       */
-      public Builder clearStartMilliTime() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        startMilliTime_ = 0L;
+        context_ = getDefaultInstance().getContext();
         onChanged();
         return this;
       }
@@ -2772,74 +2359,73 @@ public final class TraceContextAwareWireFormats {
   }
 
   private static akka.protobuf.Descriptors.Descriptor
-          internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor;
+    internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor;
   private static
-  akka.protobuf.GeneratedMessage.FieldAccessorTable
-          internal_static_AckAndTraceContextAwareEnvelopeContainer_fieldAccessorTable;
+    akka.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_AckAndTraceContextAwareEnvelopeContainer_fieldAccessorTable;
   private static akka.protobuf.Descriptors.Descriptor
-          internal_static_TraceContextAwareRemoteEnvelope_descriptor;
+    internal_static_TraceContextAwareRemoteEnvelope_descriptor;
   private static
-  akka.protobuf.GeneratedMessage.FieldAccessorTable
-          internal_static_TraceContextAwareRemoteEnvelope_fieldAccessorTable;
+    akka.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_TraceContextAwareRemoteEnvelope_fieldAccessorTable;
   private static akka.protobuf.Descriptors.Descriptor
-          internal_static_RemoteTraceContext_descriptor;
+    internal_static_RemoteTraceContext_descriptor;
   private static
-  akka.protobuf.GeneratedMessage.FieldAccessorTable
-          internal_static_RemoteTraceContext_fieldAccessorTable;
+    akka.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_RemoteTraceContext_fieldAccessorTable;
 
   public static akka.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
+      getDescriptor() {
     return descriptor;
   }
   private static akka.protobuf.Descriptors.FileDescriptor
-          descriptor;
+      descriptor;
   static {
     java.lang.String[] descriptorData = {
-            "\n\"TraceContextAwareWireFormats.proto\032\021Wi" +
-                    "reFormats.proto\"\201\001\n(AckAndTraceContextAw" +
-                    "areEnvelopeContainer\022!\n\003ack\030\001 \001(\0132\024.Ackn" +
-                    "owledgementInfo\0222\n\010envelope\030\002 \001(\0132 .Trac" +
-                    "eContextAwareRemoteEnvelope\"\277\001\n\037TraceCon" +
-                    "textAwareRemoteEnvelope\022 \n\trecipient\030\001 \002" +
-                    "(\0132\r.ActorRefData\022#\n\007message\030\002 \002(\0132\022.Ser" +
-                    "ializedMessage\022\035\n\006sender\030\004 \001(\0132\r.ActorRe" +
-                    "fData\022\013\n\003seq\030\005 \001(\006\022)\n\014traceContext\030\017 \001(\013" +
-                    "2\023.RemoteTraceContext\"c\n\022RemoteTraceCont",
-            "ext\022\021\n\ttraceName\030\001 \002(\t\022\022\n\ntraceToken\030\002 \002" +
-                    "(\t\022\016\n\006isOpen\030\003 \002(\010\022\026\n\016startMilliTime\030\004 \002" +
-                    "(\006B\037\n\033akka.remote.instrumentationH\001"
+      "\n\"TraceContextAwareWireFormats.proto\032\021Wi" +
+      "reFormats.proto\"\201\001\n(AckAndTraceContextAw" +
+      "areEnvelopeContainer\022!\n\003ack\030\001 \001(\0132\024.Ackn" +
+      "owledgementInfo\0222\n\010envelope\030\002 \001(\0132 .Trac" +
+      "eContextAwareRemoteEnvelope\"\277\001\n\037TraceCon" +
+      "textAwareRemoteEnvelope\022 \n\trecipient\030\001 \002" +
+      "(\0132\r.ActorRefData\022#\n\007message\030\002 \002(\0132\022.Ser" +
+      "ializedMessage\022\035\n\006sender\030\004 \001(\0132\r.ActorRe" +
+      "fData\022\013\n\003seq\030\005 \001(\006\022)\n\014traceContext\030\017 \001(\013" +
+      "2\023.RemoteTraceContext\"%\n\022RemoteTraceCont",
+      "ext\022\017\n\007context\030\001 \002(\014B\037\n\033akka.remote.inst" +
+      "rumentationH\001"
     };
     akka.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
-            new akka.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
-              public akka.protobuf.ExtensionRegistry assignDescriptors(
-                      akka.protobuf.Descriptors.FileDescriptor root) {
-                descriptor = root;
-                internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor =
-                        getDescriptor().getMessageTypes().get(0);
-                internal_static_AckAndTraceContextAwareEnvelopeContainer_fieldAccessorTable = new
-                        akka.protobuf.GeneratedMessage.FieldAccessorTable(
-                        internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor,
-                        new java.lang.String[] { "Ack", "Envelope", });
-                internal_static_TraceContextAwareRemoteEnvelope_descriptor =
-                        getDescriptor().getMessageTypes().get(1);
-                internal_static_TraceContextAwareRemoteEnvelope_fieldAccessorTable = new
-                        akka.protobuf.GeneratedMessage.FieldAccessorTable(
-                        internal_static_TraceContextAwareRemoteEnvelope_descriptor,
-                        new java.lang.String[] { "Recipient", "Message", "Sender", "Seq", "TraceContext", });
-                internal_static_RemoteTraceContext_descriptor =
-                        getDescriptor().getMessageTypes().get(2);
-                internal_static_RemoteTraceContext_fieldAccessorTable = new
-                        akka.protobuf.GeneratedMessage.FieldAccessorTable(
-                        internal_static_RemoteTraceContext_descriptor,
-                        new java.lang.String[] { "TraceName", "TraceToken", "IsOpen", "StartMilliTime", });
-                return null;
-              }
-            };
+      new akka.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
+        public akka.protobuf.ExtensionRegistry assignDescriptors(
+            akka.protobuf.Descriptors.FileDescriptor root) {
+          descriptor = root;
+          internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor =
+            getDescriptor().getMessageTypes().get(0);
+          internal_static_AckAndTraceContextAwareEnvelopeContainer_fieldAccessorTable = new
+            akka.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_AckAndTraceContextAwareEnvelopeContainer_descriptor,
+              new java.lang.String[] { "Ack", "Envelope", });
+          internal_static_TraceContextAwareRemoteEnvelope_descriptor =
+            getDescriptor().getMessageTypes().get(1);
+          internal_static_TraceContextAwareRemoteEnvelope_fieldAccessorTable = new
+            akka.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_TraceContextAwareRemoteEnvelope_descriptor,
+              new java.lang.String[] { "Recipient", "Message", "Sender", "Seq", "TraceContext", });
+          internal_static_RemoteTraceContext_descriptor =
+            getDescriptor().getMessageTypes().get(2);
+          internal_static_RemoteTraceContext_fieldAccessorTable = new
+            akka.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_RemoteTraceContext_descriptor,
+              new java.lang.String[] { "Context", });
+          return null;
+        }
+      };
     akka.protobuf.Descriptors.FileDescriptor
-            .internalBuildGeneratedFileFrom(descriptorData,
-                    new akka.protobuf.Descriptors.FileDescriptor[] {
-                            akka.remote.WireFormats.getDescriptor(),
-                    }, assigner);
+      .internalBuildGeneratedFileFrom(descriptorData,
+        new akka.protobuf.Descriptors.FileDescriptor[] {
+          akka.remote.WireFormats.getDescriptor(),
+        }, assigner);
   }
 
   // @@protoc_insertion_point(outer_class_scope)

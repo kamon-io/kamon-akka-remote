@@ -20,21 +20,20 @@ import akka.actor.ActorSystem
 import akka.testkit.{ ImplicitSender, TestKitBase }
 import com.typesafe.config.Config
 import kamon.Kamon
-import kamon.metric.{ Entity, EntitySnapshot, SubscriptionsDispatcher }
+/*import kamon.metric.{ Entity, EntitySnapshot, SubscriptionsDispatcher }
 import kamon.trace.TraceContext
-import kamon.util.LazyActorRef
+import kamon.util.LazyActorRef*/
 import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 
 abstract class BaseKamonSpec(actorSystemName: String) extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with BeforeAndAfterAll {
-  lazy val collectionContext = Kamon.metrics.buildDefaultCollectionContext
+  //lazy val collectionContext = Kamon.metrics.buildDefaultCollectionContext
   implicit lazy val system: ActorSystem = {
-    Kamon.start()
     ActorSystem(actorSystemName, config)
   }
 
   def config: Config =
     Kamon.config
-
+/*
   def newContext(name: String): TraceContext =
     Kamon.tracer.newContext(name)
 
@@ -60,7 +59,7 @@ abstract class BaseKamonSpec(actorSystemName: String) extends TestKitBase with W
     val subscriptions = subscriptionsField.get(Kamon.metrics).asInstanceOf[LazyActorRef]
 
     subscriptions.tell(SubscriptionsDispatcher.Tick)
-  }
+  }*/
 
-  override protected def afterAll(): Unit = system.shutdown()
+  override protected def afterAll(): Unit = system.terminate()
 }
