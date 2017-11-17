@@ -148,11 +148,12 @@ class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends 
 
 object TraceTokenReplier {
   def props(creationTraceContextListener: Option[ActorRef]): Props =
-    Props(new TraceTokenReplier(creationTraceContextListener))
+    Props(classOf[TraceTokenReplier], creationTraceContextListener)
 
   def remoteProps(creationTraceContextListener: Option[ActorRef], remoteAddress: Address): Props = {
-    Props(new TraceTokenReplier(creationTraceContextListener))
+    Props(classOf[TraceTokenReplier], creationTraceContextListener)
       .withDeploy(Deploy(scope = RemoteScope(remoteAddress)))
+
   }
 }
 
