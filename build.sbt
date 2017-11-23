@@ -50,6 +50,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
   .settings(aspectJSettings: _*)
   .settings(Seq(
       bintrayPackage := "kamon-akka-remote",
+      isSnapshot := true,
       moduleName := "kamon-akka-remote-2.5",
       scalaVersion := "2.11.8",
       crossScalaVersions := Seq("2.12.1", "2.11.8")
@@ -65,6 +66,7 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
   .settings(aspectJSettings: _*)
   .settings(Seq(
       bintrayPackage := "kamon-akka-remote",
+      isSnapshot := true,
       moduleName := "kamon-akka-remote-2.4",
       scalaVersion := "2.11.8",
       crossScalaVersions := Seq("2.11.8", "2.12.1")
