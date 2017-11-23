@@ -13,15 +13,15 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "1.0.0-RC3"
-val kamonAkkaVersion    = "1.0.0-RC3-a53ba4493a3331a9eff37e42f943fac09c6ef8e1"
+val kamonVersion        = "1.0.0-RC4"
+val kamonAkkaVersion    = "1.0.0-RC4"
 
 val akka24Version       = "2.4.16"
 val akka25Version       = "2.5.0"
 
 val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
 val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"         % kamonVersion
-val kamonScala          = "io.kamon"                    %%  "kamon-scala"           % "1.0.0-RC3-dc88b87015311d4487a3056201cd780608763137"
+val kamonScala          = "io.kamon"                    %%  "kamon-scala"           % "1.0.0-RC4"
 val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
 val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % kamonAkkaVersion
 
