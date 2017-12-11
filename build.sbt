@@ -13,10 +13,10 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "1.0.0-RC4"
-val kamonAkkaVersion    = "1.0.0-RC4"
+val kamonVersion        = "1.0.0-RC5"
+val kamonAkkaVersion    = "1.0.0-RC5"
 
-val akka24Version       = "2.4.16"
+val akka24Version       = "2.4.20"
 val akka25Version       = "2.5.0"
 
 val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
@@ -68,7 +68,7 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
       bintrayPackage := "kamon-akka-remote",
       isSnapshot := true,
       moduleName := "kamon-akka-remote-2.4",
-      scalaVersion := "2.11.8",
+      scalaVersion := "2.12.1",
       crossScalaVersions := Seq("2.11.8", "2.12.1")
   ))
   .settings(

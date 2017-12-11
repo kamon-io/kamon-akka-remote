@@ -14,6 +14,7 @@ import kamon.context.Context
 import kamon.testkit.{ContextTesting, MetricInspection}
 import org.scalatest.{Matchers, WordSpecLike}
 import org.scalatest.Inspectors._
+import org.scalatest.Matchers._
 
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
@@ -27,7 +28,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
         |  loggers = ["akka.event.slf4j.Slf4jLogger"]
         |
         |  actor {
-        |    provider = "remote"
+        |    provider = "akka.remote.RemoteActorRefProvider"
         |  }
         |  remote {
         |    enabled-transports = ["akka.remote.netty.tcp"]
@@ -36,7 +37,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
         |      port = 2552
         |    }
         |  }
-        |
         |}
       """.stripMargin))
   }
@@ -47,7 +47,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       |  loggers = ["akka.event.slf4j.Slf4jLogger"]
       |
       |  actor {
-      |    provider = "remote"
+      |    provider = "akka.remote.RemoteActorRefProvider"
       |  }
       |  remote {
       |    enabled-transports = ["akka.remote.netty.tcp"]
@@ -83,9 +83,9 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       Kamon.withContext(contextWithBroadcast("message-remote-actor-1")) {
         remoteRef ! "reply-trace-token"
       }
-
       expectMsg("name=message-remote-actor-1")
     }
+
 
     "propagate the TraceContext when pipe or ask a message to a remotely deployed actor" in {
       implicit val ec = system.dispatcher
@@ -98,7 +98,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
       expectMsg("name=ask-and-pipe-remote-actor-1")
     }
-
     "propagate the TraceContext when sending a message to an ActorSelection" in {
       remoteSystem.actorOf(TraceTokenReplier.props(None), "actor-selection-target-a")
       remoteSystem.actorOf(TraceTokenReplier.props(None), "actor-selection-target-b")
@@ -113,26 +112,35 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       expectMsg("name=message-remote-actor-selection-1")
     }
 
-    "propagate the TraceContext a remotely supervised child fails" in {
-      val supervisor = system.actorOf(Props(new SupervisorOfRemote(testActor, RemoteSystemAddress)))
 
-      Kamon.withContext(contextWithBroadcast("remote-supervision-1")) {
-        supervisor ! "fail"
-      }
 
-      expectMsg("name=remote-supervision-1")
-    }
 
     "propagate the TraceContext when sending messages to remote routees of a router" in {
-      remoteSystem.actorOf(TraceTokenReplier.props(None), "remote-routee")
-      val router = system.actorOf(RoundRobinGroup(List(RemoteSystemAddress + "/user/actor-selection-target-*")).props(), "router")
+      remoteSystem.actorOf(TraceTokenReplier.props(None), "router-target-a")
+      remoteSystem.actorOf(TraceTokenReplier.props(None), "router-target-b")
+      val router = system.actorOf(RoundRobinGroup(List(
+        RemoteSystemAddress + "/user/router-target-a",
+        RemoteSystemAddress + "/user/router-target-b"
+      )).props(), "router")
 
       Kamon.withContext(contextWithBroadcast("remote-routee-1")) {
         router ! "reply-trace-token"
       }
 
       expectMsg("name=remote-routee-1")
+      expectNoMsg()
     }
+
+    "propagate the TraceContext when a remotely supervised child fails" in {
+      val supervisor = system.actorOf(Props(new SupervisorOfRemote(testActor, RemoteSystemAddress)),"SUPERVISOR")
+
+      Kamon.withContext(contextWithBroadcast("remote-supervision-1")) {
+        supervisor ! "fail"
+      }
+
+      expectMsg(2 minutes,"name=remote-supervision-1")
+    }
+
 
     "record in/out message counts and sizes for both sending and receiving side" in {
       val outMetricTags = RemotingMetrics.messages.partialRefine(
@@ -161,7 +169,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
     "record de/serialization times for messages" in {
       val systems = Seq(system.name, remoteSystem.name)
-      val directions = Seq("serialization", "deserialization")
+      val directions = Seq("out", "in")
 
       val histograms = for {
         sys <- systems
@@ -175,6 +183,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       forAll(sizes) { s => assert(s > 0) }
     }
 
+
   }
 
 }
@@ -185,7 +194,7 @@ class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends 
   }
 
   def receive = {
-    case "fail" ⇒
+    case "die" ⇒
       throw new ArithmeticException("Division by zero.")
     case "reply-trace-token" ⇒
       sender ! currentTraceContextInfo
@@ -200,11 +209,12 @@ class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends 
 
 object TraceTokenReplier {
   def props(creationTraceContextListener: Option[ActorRef]): Props =
-    Props(new TraceTokenReplier(creationTraceContextListener))
+    Props(classOf[TraceTokenReplier], creationTraceContextListener)
 
   def remoteProps(creationTraceContextListener: Option[ActorRef], remoteAddress: Address): Props = {
-    Props(new TraceTokenReplier(creationTraceContextListener))
+    Props(classOf[TraceTokenReplier], creationTraceContextListener)
       .withDeploy(Deploy(scope = RemoteScope(remoteAddress)))
+
   }
 }
 
@@ -212,7 +222,7 @@ class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address)
   val supervisedChild = context.actorOf(TraceTokenReplier.remoteProps(None, remoteAddress), "remotely-supervised-child")
 
   def receive = {
-    case "fail" ⇒ supervisedChild ! "fail"
+    case "fail" ⇒  supervisedChild ! "die"
   }
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {
