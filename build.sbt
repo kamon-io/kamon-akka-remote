@@ -22,8 +22,8 @@ val akka25Version       = "2.5.0"
 val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
 val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"         % kamonVersion
 val kamonScala          = "io.kamon"                    %%  "kamon-scala"           % "1.0.0-RC4"
-val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % "1.0.0-RC5-0d0a1cf7ceccb2890f159b9de8d88c827ab9e152"
-val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % "1.0.0-RC5-0d0a1cf7ceccb2890f159b9de8d88c827ab9e152"
+val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % "1.0.0-RC6-94266a387aafdf079ecb7bf775bbada8ab58e1b2"
+val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % "1.0.0-RC6-94266a387aafdf079ecb7bf775bbada8ab58e1b2"
 
 val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
 val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
