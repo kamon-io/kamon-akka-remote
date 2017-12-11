@@ -130,7 +130,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       expectMsg("name=remote-routee-1")
       expectNoMsg()
     }
-
     "propagate the TraceContext when a remotely supervised child fails" in {
       val supervisor = system.actorOf(Props(new SupervisorOfRemote(testActor, RemoteSystemAddress)),"SUPERVISOR")
 

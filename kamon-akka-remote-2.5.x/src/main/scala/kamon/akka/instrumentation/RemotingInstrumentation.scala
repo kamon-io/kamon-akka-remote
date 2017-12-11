@@ -1,24 +1,21 @@
 package akka.kamon.instrumentation
 
-import java.lang.reflect.Field
 import java.nio.ByteBuffer
 
 import akka.actor.{ActorRef, Address, AddressFromURIString, Cell, ExtendedActorSystem}
 import akka.KamonOptionVal.OptionVal
 import akka.dispatch.sysmsg.{Failed, SystemMessage, Terminate, Watch}
-import akka.remote.TraceContextAwareWireFormats.{AckAndTraceContextAwareEnvelopeContainer, RemoteTraceContext, TraceContextAwareRemoteEnvelope}
+import akka.remote.ContextAwareWireFormats.{AckAndContextAwareEnvelopeContainer, RemoteContext, ContextAwareRemoteEnvelope}
 import akka.remote.WireFormats._
 import akka.remote.{Ack, RemoteActorRefProvider, SeqNo}
 import akka.util.ByteString
 import kamon.Kamon
 import kamon.akka.RemotingMetrics
-import kamon.akka.context.HasTransientContext
+import kamon.akka.context.{ContextContainer, HasTransientContext}
 import kamon.context.{HasContext, Key}
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation._
 
-import scala.collection.mutable
-import scala.util.Try
 
 
 
@@ -49,15 +46,9 @@ class HasTransientContextIntoSend {
 }
 
 
-object RemotingInstrumentation {
-  val contextFields: mutable.Map[Class[_], Field] = mutable.Map.empty
-}
-
 @Aspect
 class RemotingInstrumentation {
   private lazy val serializationInstrumentation = Kamon.config().getBoolean("kamon.akka-remote.serialization-metric")
-
-  private val contextFieldName = "ajc$instance$akka_kamon_instrumentation_HasContextIntoSystemMessageMixin$kamon_context_HasContext"
 
   @Pointcut("execution(* akka.actor.ActorCell.sendSystemMessage(*)) && args(msg)")
   def sendSystemMessageInActorCell(msg: SystemMessage): Unit = {}
@@ -71,21 +62,8 @@ class RemotingInstrumentation {
   @Before("sendSystemMessageInUnstartedActorCell(msg)")
   def afterSendSystemMessageMessageInUnstartedActorCell(msg: SystemMessage): Unit = applyCurrentContext(msg)
 
-
   private def applyCurrentContext(msg: SystemMessage): Unit = {
-    val contextField = RemotingInstrumentation.contextFields.getOrElseUpdate(
-      msg.getClass, {
-        var field: Field = null
-        try {
-          field = msg.getClass.getDeclaredField(contextFieldName)
-          field.setAccessible(true)
-        } catch { case _:Throwable => () }
-        field
-      }
-    )
-    if(contextField != null && contextField.get(msg).asInstanceOf[HasContext].context == null) {
-      contextField.set(msg, HasTransientContext.fromCurrentContext())
-    }
+    msg.asInstanceOf[ContextContainer].setContext(Kamon.currentContext())
   }
 
 
@@ -100,8 +78,8 @@ class RemotingInstrumentation {
   def aroundSerializeRemoteMessage(pjp: ProceedingJoinPoint, localAddress: Address, recipient: ActorRef,
     serializedMessage: SerializedMessage, senderOption: OptionVal[ActorRef], seqOption: Option[SeqNo], ackOption: Option[Ack]): AnyRef = {
 
-    val ackAndEnvelopeBuilder = AckAndTraceContextAwareEnvelopeContainer.newBuilder
-    val envelopeBuilder = TraceContextAwareRemoteEnvelope.newBuilder
+    val ackAndEnvelopeBuilder = AckAndContextAwareEnvelopeContainer.newBuilder
+    val envelopeBuilder = ContextAwareRemoteEnvelope.newBuilder
 
     envelopeBuilder.setRecipient(serializeActorRef(recipient.path.address, recipient))
     if (senderOption.isDefined)
@@ -110,16 +88,14 @@ class RemotingInstrumentation {
     ackOption foreach { ack ⇒ ackAndEnvelopeBuilder.setAck(ackBuilder(ack)) }
     envelopeBuilder.setMessage(serializedMessage)
 
-    if(Kamon.currentContext() != null) {
-      val remoteTraceContext = RemoteTraceContext.newBuilder().setContext(
-        akka.protobuf.ByteString.copyFrom(
-          Kamon.contextCodec().Binary.encode(
-            Kamon.currentContext()
-          )
+    val remoteTraceContext = RemoteContext.newBuilder().setContext(
+      akka.protobuf.ByteString.copyFrom(
+        Kamon.contextCodec().Binary.encode(
+          Kamon.currentContext()
         )
       )
-      envelopeBuilder.setTraceContext(remoteTraceContext)
-    }
+    )
+    envelopeBuilder.setTraceContext(remoteTraceContext)
 
     ackAndEnvelopeBuilder.setEnvelope(envelopeBuilder)
 
@@ -164,7 +140,7 @@ class RemotingInstrumentation {
 
   @Around("decodeRemoteMessage(bs, provider, localAddress)")
   def aroundDecodeRemoteMessage(pjp: ProceedingJoinPoint, bs: ByteString, provider: RemoteActorRefProvider, localAddress: Address): AnyRef = {
-    val ackAndEnvelope = AckAndTraceContextAwareEnvelopeContainer.parseFrom(bs.toArray)
+    val ackAndEnvelope = AckAndContextAwareEnvelopeContainer.parseFrom(bs.toArray)
     if (ackAndEnvelope.hasEnvelope && ackAndEnvelope.getEnvelope.hasTraceContext) {
       val remoteCtx = ackAndEnvelope.getEnvelope.getTraceContext
 

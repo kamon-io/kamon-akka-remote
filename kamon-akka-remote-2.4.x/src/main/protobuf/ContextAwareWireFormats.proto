@@ -10,21 +10,21 @@ option optimize_for = SPEED;
  *   Kamon-specific additions to the protocol
  ************************************************/
 
-message AckAndTraceContextAwareEnvelopeContainer {
+message AckAndContextAwareEnvelopeContainer {
     optional AcknowledgementInfo ack = 1;
-    optional TraceContextAwareRemoteEnvelope envelope = 2;
+    optional ContextAwareRemoteEnvelope envelope = 2;
 }
 
-message TraceContextAwareRemoteEnvelope {
+message ContextAwareRemoteEnvelope {
     required ActorRefData recipient = 1;
     required SerializedMessage message = 2;
     optional ActorRefData sender = 4;
     optional fixed64 seq = 5;
 
-    optional RemoteTraceContext traceContext = 15;
+    optional RemoteContext traceContext = 15;
 }
 
-message RemoteTraceContext {
+message RemoteContext {
     required bytes context = 1;
 }
 

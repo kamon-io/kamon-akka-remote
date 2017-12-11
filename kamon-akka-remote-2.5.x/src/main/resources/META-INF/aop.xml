@@ -4,6 +4,7 @@
   <aspects>
     <!-- Remoting and Cluster -->
     <aspect name="akka.kamon.instrumentation.RemotingInstrumentation"/>
+    <aspect name="akka.kamon.instrumentation.HasTransientContextIntoSend"/>
   </aspects>
 
   <weaver>
