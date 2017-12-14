@@ -170,9 +170,9 @@ class RemotingInstrumentation {
   @Around("serializeMessage(system, message)")
   def aroundSerializeMessage(pjp: ProceedingJoinPoint, system: ExtendedActorSystem, message: AnyRef): AnyRef = {
     if(serializationInstrumentation) {
-      val start = System.nanoTime()
+      val start = Kamon.clock().nanos()
       val res = pjp.proceed()
-      RemotingMetrics.recordSerialization(system.name, System.nanoTime() - start)
+      RemotingMetrics.recordSerialization(system.name, Kamon.clock().nanos() - start)
       res
     } else {
       pjp.proceed()
@@ -185,9 +185,9 @@ class RemotingInstrumentation {
   @Around("deserializeMessage(system, messageProtocol)")
   def aroundDeserializeMessage(pjp: ProceedingJoinPoint, system: ExtendedActorSystem, messageProtocol: SerializedMessage): AnyRef = {
     if(serializationInstrumentation) {
-      val start = System.nanoTime()
+      val start = Kamon.clock().nanos()
       val res = pjp.proceed()
-      RemotingMetrics.recordDeserialization(system.name, System.nanoTime() - start)
+      RemotingMetrics.recordDeserialization(system.name, Kamon.clock().nanos() - start)
       res
     } else {
       pjp.proceed()
