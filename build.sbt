@@ -13,17 +13,17 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "1.0.0-RC4"
-val kamonAkkaVersion    = "1.0.0-RC4"
+val kamonVersion        = "1.0.0-RC5"
+val kamonAkkaVersion    = "1.0.0-RC5"
 
-val akka24Version       = "2.4.16"
+val akka24Version       = "2.4.20"
 val akka25Version       = "2.5.0"
 
 val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
 val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"         % kamonVersion
 val kamonScala          = "io.kamon"                    %%  "kamon-scala"           % "1.0.0-RC4"
-val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
-val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % kamonAkkaVersion
+val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % "1.0.0-RC6-94266a387aafdf079ecb7bf775bbada8ab58e1b2"
+val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % "1.0.0-RC6-94266a387aafdf079ecb7bf775bbada8ab58e1b2"
 
 val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
 val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
@@ -68,7 +68,7 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
       bintrayPackage := "kamon-akka-remote",
       isSnapshot := true,
       moduleName := "kamon-akka-remote-2.4",
-      scalaVersion := "2.11.8",
+      scalaVersion := "2.12.1",
       crossScalaVersions := Seq("2.11.8", "2.12.1")
   ))
   .settings(
