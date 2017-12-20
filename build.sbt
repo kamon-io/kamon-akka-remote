@@ -13,9 +13,9 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "1.0.0-RC6"
-val kamonScalaVersion   = "1.0.0-RC6"
-val kamonAkkaVersion    = "1.0.0-RC6"
+val kamonVersion        = "1.0.0-RC7"
+val kamonScalaVersion   = "1.0.0-RC7"
+val kamonAkkaVersion    = "1.0.0-RC7"
 
 val akka24Version       = "2.4.20"
 val akka25Version       = "2.5.0"
