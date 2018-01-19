@@ -2,7 +2,7 @@
 
 ![Build Status](https://travis-ci.org/kamon-io/kamon-akka-remote.svg?branch=master)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/kamon-io/Kamon?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kamon/kamon-akka-remote-25_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.kamon/kamon-akka-remote-25_2.12)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.kamon/kamon-akka-remote-2.5_2.12/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.kamon/kamon-akka-remote-2.5_2.12)
 
 The <b>kamon-akka-remote</b> modules require you to start your application using the AspectJ
 Weaver Agent. Kamon will warn you at startup if you failed to do so.
