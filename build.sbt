@@ -38,6 +38,8 @@ val akkaSlf4j24         = "com.typesafe.akka"           %%  "akka-slf4j"        
 val akkaTestKit24       = "com.typesafe.akka"           %%  "akka-testkit"          % akka24Version
 val akkaRemote24        = "com.typesafe.akka"           %%  "akka-remote"           % akka24Version
 val akkaCluster24       = "com.typesafe.akka"           %%  "akka-cluster"          % akka24Version
+val akkaSharding24      = "com.typesafe.akka"           %%  "akka-cluster-sharding" % akka24Version
+val akkaDData24         = "com.typesafe.akka"           %%  "akka-distributed-data-experimental" % akka24Version
 
 val protobuf            = "com.google.protobuf"         % "protobuf-java"           % "3.4.0"
 
@@ -76,6 +78,6 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         compileScope(akkaActor24, kamonCore, kamonAkka24, kamonScala, akkaRemote24, akkaCluster24) ++
         providedScope(aspectJ) ++
         optionalScope(logbackClassic) ++
-        testScope(scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
+        testScope(akkaSharding24, akkaDData24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
 enableProperCrossScalaVersionTasks

@@ -1,4 +1,4 @@
-package kamon.akka.instrumentation
+package kamon.instrumentation.akka
 
 import akka.actor.SupervisorStrategy.Resume
 import akka.actor._
