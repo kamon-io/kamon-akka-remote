@@ -5,6 +5,7 @@
     <!-- Remoting and Cluster -->
     <aspect name="akka.kamon.instrumentation.RemotingInstrumentation"/>
     <aspect name="akka.kamon.instrumentation.HasTransientContextIntoSend"/>
+    <aspect name="akka.kamon.instrumentation.MessageBufferInstrumentation"/>
   </aspects>
 
   <weaver>

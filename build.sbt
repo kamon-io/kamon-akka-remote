@@ -31,12 +31,15 @@ val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"        
 val akkaTestKit25       = "com.typesafe.akka"           %%  "akka-testkit"          % akka25Version
 val akkaRemote25        = "com.typesafe.akka"           %%  "akka-remote"           % akka25Version
 val akkaCluster25       = "com.typesafe.akka"           %%  "akka-cluster"          % akka25Version
+val akkaSharding25      = "com.typesafe.akka"           %%  "akka-cluster-sharding" % akka25Version
 
 val akkaActor24         = "com.typesafe.akka"           %%  "akka-actor"            % akka24Version
 val akkaSlf4j24         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka24Version
 val akkaTestKit24       = "com.typesafe.akka"           %%  "akka-testkit"          % akka24Version
 val akkaRemote24        = "com.typesafe.akka"           %%  "akka-remote"           % akka24Version
 val akkaCluster24       = "com.typesafe.akka"           %%  "akka-cluster"          % akka24Version
+val akkaSharding24      = "com.typesafe.akka"           %%  "akka-cluster-sharding" % akka24Version
+val akkaDData24         = "com.typesafe.akka"           %%  "akka-distributed-data-experimental" % akka24Version
 
 val protobuf            = "com.google.protobuf"         % "protobuf-java"           % "3.4.0"
 
@@ -60,7 +63,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
         compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25) ++
         providedScope(aspectJ) ++
         optionalScope(logbackClassic) ++
-        testScope(scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit))
+        testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit))
 
 lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-remote-2.4.x"))
   .settings(aspectJSettings: _*)
@@ -75,6 +78,6 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         compileScope(akkaActor24, kamonCore, kamonAkka24, kamonScala, akkaRemote24, akkaCluster24) ++
         providedScope(aspectJ) ++
         optionalScope(logbackClassic) ++
-        testScope(scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
+        testScope(akkaSharding24, akkaDData24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
 enableProperCrossScalaVersionTasks
