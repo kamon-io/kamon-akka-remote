@@ -26,40 +26,12 @@ import kamon.util.LazyActorRef*/
 import org.scalatest.{ BeforeAndAfterAll, Matchers, WordSpecLike }
 
 abstract class BaseKamonSpec(actorSystemName: String) extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with BeforeAndAfterAll {
-  //lazy val collectionContext = Kamon.metrics.buildDefaultCollectionContext
   implicit lazy val system: ActorSystem = {
     ActorSystem(actorSystemName, config)
   }
 
   def config: Config =
     Kamon.config
-/*
-  def newContext(name: String): TraceContext =
-    Kamon.tracer.newContext(name)
-
-  def newContext(name: String, token: String): TraceContext =
-    Kamon.tracer.newContext(name, Option(token))
-
-  def newContext(name: String, token: String, tags: Map[String, String]): TraceContext =
-    Kamon.tracer.newContext(name, Option(token), tags)
-
-  def takeSnapshotOf(name: String, category: String): EntitySnapshot = {
-    val recorder = Kamon.metrics.find(name, category).get
-    recorder.collect(collectionContext)
-  }
-
-  def takeSnapshotOf(name: String, category: String, tags: Map[String, String]): EntitySnapshot = {
-    val recorder = Kamon.metrics.find(Entity(name, category, tags)).get
-    recorder.collect(collectionContext)
-  }
-
-  def flushSubscriptions(): Unit = {
-    val subscriptionsField = Kamon.metrics.getClass.getDeclaredField("_subscriptions")
-    subscriptionsField.setAccessible(true)
-    val subscriptions = subscriptionsField.get(Kamon.metrics).asInstanceOf[LazyActorRef]
-
-    subscriptions.tell(SubscriptionsDispatcher.Tick)
-  }*/
 
   override protected def afterAll(): Unit = system.terminate()
 }
