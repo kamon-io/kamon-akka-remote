@@ -45,10 +45,11 @@ val protobuf            = "com.google.protobuf"         % "protobuf-java"       
 
 resolvers += Resolver.mavenLocal
 
+parallelExecution in Test in Global := false
+
 lazy val `kamon-akka-remote` = (project in file("."))
   .settings(noPublishing: _*)
   .aggregate(kamonAkkaRemote24, kamonAkkaRemote25)
-
 
 lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-remote-2.5.x"))
   .settings(aspectJSettings: _*)
@@ -60,7 +61,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
   ))
   .settings(
       libraryDependencies ++=
-        compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25) ++
+        compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25, akkaSharding25) ++
         providedScope(aspectJ) ++
         optionalScope(logbackClassic) ++
         testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit))
