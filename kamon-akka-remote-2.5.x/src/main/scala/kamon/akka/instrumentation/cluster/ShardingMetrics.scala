@@ -17,11 +17,11 @@ object ShardingMetrics {
   private var samplingSchedule: Option[ScheduledFuture[_]] = None
   private val instruments = TrieMap.empty[String, ShardRegionMonitor]
 
-  private val regionShards = Kamon.rangeSampler(s"$prefix.region.shards")
-  private val regionEntities = Kamon.histogram(s"$prefix.region.entities")
-  private val regionMessages = Kamon.counter(s"$prefix.region.messages")
-  private val shardEntities = Kamon.histogram(s"$prefix.shard.entities")
-  private val shardMessages = Kamon.histogram(s"$prefix.shard.messages")
+  private val regionShards = Kamon.rangeSampler(s"$prefix.region.hosted-shards")
+  private val regionEntities = Kamon.histogram(s"$prefix.region.hosted-entities")
+  private val regionMessages = Kamon.counter(s"$prefix.region.processed-messages")
+  private val shardEntities = Kamon.histogram(s"$prefix.shard.hosted-entities")
+  private val shardMessages = Kamon.histogram(s"$prefix.shard.processed-messages")
 
   def byRegion(regionType: String) = ("type" -> regionType)
 
