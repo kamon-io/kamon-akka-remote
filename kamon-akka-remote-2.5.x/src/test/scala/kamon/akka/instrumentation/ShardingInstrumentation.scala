@@ -10,6 +10,7 @@ import akka.testkit.TestActor.Watch
 import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
 import kamon.testkit.MetricInspection
+import org.scalatest.concurrent.Eventually
 import org.scalatest.{Matchers, WordSpecLike}
 
 import scala.collection.immutable
@@ -22,7 +23,8 @@ class ShardingInstrumentationSpec
     with WordSpecLike
     with Matchers
     with ImplicitSender
-    with MetricInspection {
+    with MetricInspection
+    with Eventually {
   import ShardingMetrics._
 
   lazy val system: ActorSystem = {
@@ -90,8 +92,8 @@ class ShardingInstrumentationSpec
     )
 
   class ShardedTypeContext  {
-    val tpe = s"TestType-${Random.nextLong()}"
-    val region = registerTypes(tpe, TestActor.props(testActor), system, StaticAllocationStrategy)
+    val shardType = s"TestType-${Random.nextLong()}"
+    val region = registerTypes(shardType, TestActor.props(testActor), system, StaticAllocationStrategy)
   }
 
   "Cluster sharding instrumentation" should {
@@ -102,47 +104,56 @@ class ShardingInstrumentationSpec
 
       (1 to 3).foreach(_ => expectMsg("OK"))
 
-      shardsPerRegion(tpe).value(true) should be(2)
-      entitiesPerRegion(tpe).value(true) should be(3)
+      eventually {
+        shardsPerRegion(shardType).distribution(true).max should be(2)
+        entitiesPerRegion(shardType).distribution(true).max should be(3)
+      }
 
-      val shardentityDistribution = entitiesPerShard(tpe).distribution(true)
+      val shardentityDistribution = entitiesPerShard(shardType).distribution(true)
       shardentityDistribution.max should be(2)
 
-      messagesPerRegion(tpe).value(true) should be(3)
-      messagesPerShard(tpe).distribution(true).sum should be(3)
+      messagesPerRegion(shardType).value(true) should be(3)
+      messagesPerShard(shardType).distribution(true).sum should be(3)
     }
 
     "clean metrics on handoff" in new ShardedTypeContext {
       region ! TestMessage("s1", "e1")
       expectMsg("OK")
 
-      shardsPerRegion(tpe).value(false) should be(1)
-      entitiesPerRegion(tpe).value(false) should be(1)
-      entitiesPerShard(tpe).distribution(false).max should be(1)
+      eventually {
+        shardsPerRegion(shardType).distribution(true).max should be(1)
+        entitiesPerRegion(shardType).distribution(true).max should be(1)
+        entitiesPerShard(shardType).distribution(true).max should be(1)
+      }
 
       region ! HandOff("s1")
       expectMsg(ShardStopped("s1"))
 
-      shardsPerRegion(tpe).value(true) should be(0)
-      entitiesPerRegion(tpe).value(true) should be(0)
+      eventually {
+        shardsPerRegion(shardType).distribution(true).max should be(0)
+        entitiesPerRegion(shardType).distribution(true).max should be (0)
+      }
     }
 
     "clean metrics on shutdown" in new ShardedTypeContext {
       region ! TestMessage("s1", "e1")
       expectMsg("OK")
 
-      shardsPerRegion(tpe).value(false) should be(1)
-      entitiesPerShard(tpe).distribution(false).max should be(1)
-      entitiesPerRegion(tpe).value(false) should be(1)
+      eventually {
+        shardsPerRegion(shardType).distribution(true).max should be(1)
+        entitiesPerShard(shardType).distribution(true).max should be(1)
+        entitiesPerRegion(shardType).distribution(true).max should be(1)
+      }
 
       testActor ! Watch(region)
-
       region ! GracefulShutdown
 
       expectTerminated(region)
 
-      shardsPerRegion(tpe).value(false) should be(0)
-      entitiesPerRegion(tpe).value(false) should be(0)
+      eventually {
+        shardsPerRegion(shardType).distribution(true).max should be(0)
+        entitiesPerRegion(shardType).distribution(true).max should be(0)
+      }
     }
 
   }
