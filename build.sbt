@@ -53,13 +53,14 @@ lazy val `kamon-akka-remote` = (project in file("."))
 
 
 lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-remote-2.5.x"))
-  .settings(aspectJSettings: _*)
   .settings(Seq(
     bintrayPackage := "kamon-akka-remote",
     moduleName := "kamon-akka-remote-2.5",
     scalaVersion := "2.11.8",
     crossScalaVersions := Seq("2.12.1", "2.11.8")
   ))
+  .enablePlugins(JavaAgent)
+  .settings(javaAgents ++= resolveAgent)
   .settings(
     libraryDependencies ++=
       compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25) ++
@@ -68,13 +69,14 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
         testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit))
 
 lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-remote-2.4.x"))
-  .settings(aspectJSettings: _*)
   .settings(Seq(
     bintrayPackage := "kamon-akka-remote",
     moduleName := "kamon-akka-remote-2.4",
     scalaVersion := "2.12.1",
     crossScalaVersions := Seq("2.11.8", "2.12.1")
   ))
+  .enablePlugins(JavaAgent)
+  .settings(javaAgents ++= resolveAgent)
   .settings(
     libraryDependencies ++=
       compileScope(akkaActor24, kamonCore, kamonAkka24, kamonScala, akkaRemote24, akkaCluster24) ++
@@ -82,4 +84,4 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         optionalScope(logbackClassic) ++
         testScope(akkaSharding24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
-enableProperCrossScalaVersionTasks
+def resolveAgent: Seq[ModuleID] = Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test")
