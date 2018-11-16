@@ -50,10 +50,12 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
       |}
     """.stripMargin))
 
+  val StringBroadcastTag = "string-broadcast-tag"
+
   def contextWithBroadcast(name: String): Context =
-    Context.create(
-      StringBroadcastKey,
-      Some(name)
+    Context.Empty.withTag(
+      StringBroadcastTag,
+      name
     )
 
   val extractEntityId: ShardRegion.ExtractEntityId = {

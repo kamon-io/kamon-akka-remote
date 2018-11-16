@@ -21,6 +21,8 @@ import scala.util.control.NonFatal
 
 class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
 
+  val StringBroadcastTag = "string-broadcast-tag"
+
   implicit lazy val system: ActorSystem = {
     ActorSystem("remoting-spec-local-system", ConfigFactory.parseString(
       """
@@ -63,9 +65,9 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
 
   def contextWithBroadcast(name: String): Context =
-    Context.create(
-      StringBroadcastKey,
-      Some(name)
+    Context.Empty.withTag(
+      StringBroadcastTag,
+      name
     )
 
   "The Remoting instrumentation akka-2.4" should {
@@ -191,6 +193,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
 class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address) extends Actor with ContextTesting {
   val supervisedChild = context.actorOf(TraceTokenReplier.remoteProps(None, remoteAddress), "remotely-supervised-child")
+  val StringBroadcastTag = "string-broadcast-tag"
 
   def receive = {
     case "fail" ⇒  supervisedChild ! "die"
@@ -205,7 +208,7 @@ class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address)
 
   def currentTraceContextInfo: String = {
     val ctx = Kamon.currentContext()
-    val name = ctx.get(StringBroadcastKey).getOrElse("")
+    val name = ctx.getTag(StringBroadcastTag).getOrElse("")
     s"name=$name"
   }
 }

@@ -1,18 +1,19 @@
 package akka.kamon.instrumentation
 
-import java.nio.ByteBuffer
+import java.io.ByteArrayOutputStream
 
-import akka.actor.{ActorRef, Address, AddressFromURIString, Cell, ExtendedActorSystem}
 import akka.KamonOptionVal.OptionVal
-import akka.dispatch.sysmsg.{Failed, SystemMessage, Terminate, Watch}
-import akka.remote.ContextAwareWireFormats.{AckAndContextAwareEnvelopeContainer, RemoteContext, ContextAwareRemoteEnvelope}
+import akka.actor.{ActorRef, Address, AddressFromURIString, ExtendedActorSystem}
+import akka.dispatch.sysmsg.SystemMessage
+import akka.remote.ContextAwareWireFormats.{AckAndContextAwareEnvelopeContainer, ContextAwareRemoteEnvelope, RemoteContext}
 import akka.remote.WireFormats._
 import akka.remote.{Ack, RemoteActorRefProvider, SeqNo}
 import akka.util.ByteString
 import kamon.Kamon
 import kamon.akka.RemotingMetrics
 import kamon.akka.context.{ContextContainer, HasTransientContext}
-import kamon.context.{HasContext, Key}
+import kamon.context.BinaryPropagation.{ByteStreamReader, ByteStreamWriter}
+import kamon.instrumentation.Mixin.HasContext
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation._
 
@@ -88,12 +89,11 @@ class RemotingInstrumentation {
     ackOption foreach { ack ⇒ ackAndEnvelopeBuilder.setAck(ackBuilder(ack)) }
     envelopeBuilder.setMessage(serializedMessage)
 
+    val out = new ByteArrayOutputStream()
+    Kamon.defaultBinaryPropagation().write(Kamon.currentContext(), ByteStreamWriter.of(out))
+
     val remoteTraceContext = RemoteContext.newBuilder().setContext(
-      akka.protobuf.ByteString.copyFrom(
-        Kamon.contextCodec().Binary.encode(
-          Kamon.currentContext()
-        )
-      )
+        akka.protobuf.ByteString.copyFrom(out.toByteArray)
     )
     envelopeBuilder.setTraceContext(remoteTraceContext)
 
@@ -145,8 +145,8 @@ class RemotingInstrumentation {
       val remoteCtx = ackAndEnvelope.getEnvelope.getTraceContext
 
       if(remoteCtx.getContext.size() > 0) {
-        val ctx = Kamon.contextCodec().Binary.decode(
-          ByteBuffer.wrap(remoteCtx.getContext.toByteArray)
+        val ctx = Kamon.defaultBinaryPropagation().read(
+          ByteStreamReader.of(remoteCtx.getContext.toByteArray)
         )
         Kamon.storeContext(ctx)
       }

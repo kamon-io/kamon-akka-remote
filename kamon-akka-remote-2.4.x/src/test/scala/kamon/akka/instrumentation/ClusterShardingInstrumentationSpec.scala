@@ -11,6 +11,7 @@ import kamon.testkit.{ContextTesting, MetricInspection}
 import org.scalatest.{Matchers, WordSpecLike}
 
 class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
+  val StringBroadcastTag = "string-broadcast-key"
 
   implicit lazy val system: ActorSystem = {
     ActorSystem("cluster-sharding-spec-system", ConfigFactory.parseString(
@@ -55,9 +56,9 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
     """.stripMargin))
 
   def contextWithBroadcast(name: String): Context =
-    Context.create(
-      StringBroadcastKey,
-      Some(name)
+    Context.Empty.withTag(
+      StringBroadcastTag,
+      name
     )
 
   val extractEntityId: ShardRegion.ExtractEntityId = {

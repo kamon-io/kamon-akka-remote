@@ -7,7 +7,8 @@ import java.util.concurrent.atomic.LongAdder
 import akka.actor.ActorRef
 import akka.cluster.sharding.Shard
 import com.typesafe.config.Config
-import kamon.{Kamon, OnReconfigureHook}
+import kamon.Configuration.OnReconfigureHook
+import kamon.Kamon
 
 import scala.collection.concurrent.TrieMap
 

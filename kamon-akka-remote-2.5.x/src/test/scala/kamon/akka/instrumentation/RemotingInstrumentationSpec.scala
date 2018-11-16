@@ -61,11 +61,12 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
   val RemoteSystemAddress = AddressFromURIString("akka.tcp://remoting-spec-remote-system@127.0.0.1:2553")
 
+  val StringBroadcastTag = "string-broadcast-tag"
 
   def contextWithBroadcast(name: String): Context =
-    Context.create(
-      StringBroadcastKey,
-      Some(name)
+    Context.Empty.withTag(
+      StringBroadcastTag,
+      name
     )
 
   "The Remoting instrumentation akka-2.5" should {
@@ -128,7 +129,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       }
 
       expectMsg("name=remote-routee-1")
-      expectNoMsg()
+      expectNoMessage()
     }
     "propagate the TraceContext when a remotely supervised child fails" in {
       val supervisor = system.actorOf(Props(new SupervisorOfRemote(testActor, RemoteSystemAddress)),"SUPERVISOR")
@@ -201,9 +202,11 @@ class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address)
     case _ => Resume
   }
 
+  val StringBroadcastTag = "string-broadcast-tag"
+
   def currentTraceContextInfo: String = {
     val ctx = Kamon.currentContext()
-    val name = ctx.get(StringBroadcastKey).getOrElse("")
+    val name = ctx.getTag(StringBroadcastTag).getOrElse("")
     s"name=$name"
   }
 }

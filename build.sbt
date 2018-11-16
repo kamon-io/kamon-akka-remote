@@ -13,9 +13,9 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "1.1.3"
-val kamonScalaVersion   = "1.0.0"
-val kamonAkkaVersion    = "1.1.2"
+val kamonVersion        = "1.2.0-M1"
+val kamonScalaVersion   = "1.1.0-M1"
+val kamonAkkaVersion    = "1.1.3-c28145a2905ffb0089720f2cc41d5451e113b624"
 
 val akka24Version       = "2.4.20"
 val akka25Version       = "2.5.13"
@@ -25,6 +25,8 @@ val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"     
 val kamonScala          = "io.kamon"                    %%  "kamon-scala-future"    % kamonScalaVersion
 val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
 val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % kamonAkkaVersion
+
+val kanelaScalaExtension  = "io.kamon"  %%  "kanela-scala-extension"  % "0.0.14"
 
 val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
 val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
@@ -56,7 +58,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
   .settings(Seq(
     bintrayPackage := "kamon-akka-remote",
     moduleName := "kamon-akka-remote-2.5",
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.12.1",
     crossScalaVersions := Seq("2.12.1", "2.11.8")
   ))
   .enablePlugins(JavaAgent)
@@ -84,4 +86,10 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         optionalScope(logbackClassic) ++
         testScope(akkaSharding24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
-def resolveAgent: Seq[ModuleID] = Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test")
+def resolveAgent: Seq[ModuleID] = {
+  val agent = Option(System.getProperty("agent")).getOrElse("aspectj")
+  if(agent.equalsIgnoreCase("kanela"))
+    Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile", "io.kamon" % "kanela-agent" % "0.0.15" % "compile;test")
+  else
+    Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test", "io.kamon" % "kanela-agent" % "0.0.15" % "compile")
+}

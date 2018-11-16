@@ -3,7 +3,7 @@ package kamon.akka
 import akka.actor.Actor
 import akka.util.MessageBuffer
 import kamon.Kamon
-import kamon.context.{Context, Key}
+import kamon.context.Context
 import org.scalatest.{Matchers, WordSpec}
 
 class MessageBufferTest extends WordSpec with Matchers {
@@ -13,9 +13,9 @@ class MessageBufferTest extends WordSpec with Matchers {
     "remember current context when appending message and execute foreach function with it" in {
 
       val messageBuffer = MessageBuffer.empty
-      val key = Key.local("some_key", "")
+      val key = Context.key("some_key", "")
 
-      Kamon.withContext(Context(key, "some_value")) {
+      Kamon.withContext(Context.of(key, "some_value")) {
         messageBuffer.append("scala", Actor.noSender)
       }
 

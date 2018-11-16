@@ -17,9 +17,11 @@ class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends 
       sender ! currentTraceContextInfo
   }
 
+  val StringBroadcastTag = "string-broadcast-tag"
+
   def currentTraceContextInfo: String = {
     val ctx = Kamon.currentContext()
-    val name = ctx.get(StringBroadcastKey).getOrElse("")
+    val name = ctx.getTag(StringBroadcastTag).getOrElse("")
     s"name=$name"
   }
 }
