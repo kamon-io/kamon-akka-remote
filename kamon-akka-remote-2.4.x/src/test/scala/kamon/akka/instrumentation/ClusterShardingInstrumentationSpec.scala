@@ -7,11 +7,10 @@ import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
 import kamon.Kamon
 import kamon.context.Context
-import kamon.testkit.{ContextTesting, MetricInspection}
+import kamon.testkit.{ContextTesting, MetricInspection, StringBroadcastTag}
 import org.scalatest.{Matchers, WordSpecLike}
 
 class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
-  val StringBroadcastTag = "string-broadcast-key"
 
   implicit lazy val system: ActorSystem = {
     ActorSystem("cluster-sharding-spec-system", ConfigFactory.parseString(

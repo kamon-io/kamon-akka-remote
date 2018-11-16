@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 import kamon.Kamon
 import kamon.akka.RemotingMetrics
 import kamon.context.Context
-import kamon.testkit.{ContextTesting, MetricInspection}
+import kamon.testkit.{ContextTesting, MetricInspection, StringBroadcastTag}
 import org.scalatest.{Matchers, WordSpecLike}
 import org.scalatest.Inspectors._
 import org.scalatest.Matchers._
@@ -20,8 +20,6 @@ import scala.concurrent.duration._
 import scala.util.control.NonFatal
 
 class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
-
-  val StringBroadcastTag = "string-broadcast-tag"
 
   implicit lazy val system: ActorSystem = {
     ActorSystem("remoting-spec-local-system", ConfigFactory.parseString(
@@ -193,7 +191,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
 class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address) extends Actor with ContextTesting {
   val supervisedChild = context.actorOf(TraceTokenReplier.remoteProps(None, remoteAddress), "remotely-supervised-child")
-  val StringBroadcastTag = "string-broadcast-tag"
 
   def receive = {
     case "fail" ⇒  supervisedChild ! "die"

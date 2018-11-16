@@ -86,10 +86,4 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         optionalScope(logbackClassic) ++
         testScope(akkaSharding24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
-def resolveAgent: Seq[ModuleID] = {
-  val agent = Option(System.getProperty("agent")).getOrElse("aspectj")
-  if(agent.equalsIgnoreCase("kanela"))
-    Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile", "io.kamon" % "kanela-agent" % "0.0.15" % "compile;test")
-  else
-    Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test", "io.kamon" % "kanela-agent" % "0.0.15" % "compile")
-}
+def resolveAgent: Seq[ModuleID] = Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test", "io.kamon" % "kanela-agent" % "0.0.15" % "compile")

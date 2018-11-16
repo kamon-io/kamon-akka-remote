@@ -11,7 +11,7 @@ import com.typesafe.config.ConfigFactory
 import kamon.Kamon
 import kamon.akka.RemotingMetrics
 import kamon.context.Context
-import kamon.testkit.{ContextTesting, MetricInspection}
+import kamon.testkit.{ContextTesting, MetricInspection, StringBroadcastTag}
 import org.scalatest.{Matchers, WordSpecLike}
 import org.scalatest.Inspectors._
 import org.scalatest.Matchers._
@@ -60,8 +60,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
     """.stripMargin))
 
   val RemoteSystemAddress = AddressFromURIString("akka.tcp://remoting-spec-remote-system@127.0.0.1:2553")
-
-  val StringBroadcastTag = "string-broadcast-tag"
 
   def contextWithBroadcast(name: String): Context =
     Context.Empty.withTag(
@@ -201,8 +199,6 @@ class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address)
       Resume
     case _ => Resume
   }
-
-  val StringBroadcastTag = "string-broadcast-tag"
 
   def currentTraceContextInfo: String = {
     val ctx = Kamon.currentContext()

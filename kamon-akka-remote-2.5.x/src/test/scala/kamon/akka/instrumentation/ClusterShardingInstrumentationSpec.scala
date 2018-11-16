@@ -7,7 +7,7 @@ import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
 import kamon.Kamon
 import kamon.context.Context
-import kamon.testkit.{ContextTesting, MetricInspection}
+import kamon.testkit.{ContextTesting, MetricInspection, StringBroadcastTag}
 import org.scalatest.{Matchers, WordSpecLike}
 
 class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
@@ -49,8 +49,6 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
       |  }
       |}
     """.stripMargin))
-
-  val StringBroadcastTag = "string-broadcast-tag"
 
   def contextWithBroadcast(name: String): Context =
     Context.Empty.withTag(
