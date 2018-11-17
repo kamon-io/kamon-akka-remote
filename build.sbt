@@ -15,7 +15,7 @@
 
 val kamonVersion        = "1.2.0-M1"
 val kamonScalaVersion   = "1.1.0-M1"
-val kamonAkkaVersion    = "1.1.3-c28145a2905ffb0089720f2cc41d5451e113b624"
+val kamonAkkaVersion    = "1.1.3-6701c3cbad5cf6a83304cf6e8095e0ef92ef0926"
 
 val akka24Version       = "2.4.20"
 val akka25Version       = "2.5.13"
@@ -86,4 +86,10 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         optionalScope(logbackClassic) ++
         testScope(akkaSharding24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
 
-def resolveAgent: Seq[ModuleID] = Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test", "io.kamon" % "kanela-agent" % "0.0.15" % "compile")
+def resolveAgent: Seq[ModuleID] = {
+  val agent = Option(System.getProperty("agent")).getOrElse("aspectj")
+  if(agent.equalsIgnoreCase("kanela"))
+    Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile", "io.kamon" % "kanela-agent" % "0.0.15" % "compile;test")
+  else
+    Seq("org.aspectj" % "aspectjweaver" % "1.9.1" % "compile;test", "io.kamon" % "kanela-agent" % "0.0.15" % "compile")
+}
