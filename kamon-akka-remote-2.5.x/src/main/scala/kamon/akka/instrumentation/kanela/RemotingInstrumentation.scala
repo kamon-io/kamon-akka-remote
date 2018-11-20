@@ -1,8 +1,11 @@
 package kamon.akka.instrumentation.kanela
 
-import akka.kamon.instrumentation.kanela.interceptor.AkkaPduProtobufCodecConstructMessageMethodInterceptor
-import akka.remote.kamon.instrumentation.kanela.advisor.{EndpointWriterWriteSendMethodAdvisor, SendConstructorAdvisor, SendSystemMessageMethodAdvisor}
-import kamon.akka.instrumentation.kanela.mixin.HasTransientContextMixin
+import akka.kamon.akka.instrumentation.kanela.ReplaceWithMethodInterceptor
+import akka.kamon.instrumentation.kanela.advisor._
+import akka.kamon.instrumentation.kanela.interceptor.{AkkaPduProtobufCodecConstructMessageMethodInterceptor, InvokeAllMethodInterceptor}
+import akka.remote.kamon.instrumentation.kanela.advisor._
+import kamon.Kamon
+import kamon.akka.instrumentation.kanela.mixin.{ActorInstrumentationMixin, HasTransientContextMixin}
 import kanela.agent.scala.KanelaInstrumentation
 
 class RemotingInstrumentation extends KanelaInstrumentation {
@@ -19,7 +22,7 @@ class RemotingInstrumentation extends KanelaInstrumentation {
       .withAdvisorFor(method("writeSend"), classOf[EndpointWriterWriteSendMethodAdvisor])
       .build()
   }
-
+//
 //  forTargetType("akka.actor.ActorCell") { builder ⇒
 //    builder
 //      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
@@ -35,8 +38,15 @@ class RemotingInstrumentation extends KanelaInstrumentation {
   forTargetType("akka.remote.transport.AkkaPduProtobufCodec$") { builder ⇒
     builder
       .withInterceptorFor(method("constructMessage"), AkkaPduProtobufCodecConstructMessageMethodInterceptor)
+      .withAdvisorFor(method("decodeMessage"), classOf[AkkaPduProtobufCodecDecodeMessageMethodAdvisor])
       .build()
   }
 
+  forTargetType("akka.remote.MessageSerializer$") { builder =>
+    builder
+        .withAdvisorFor(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
+        .withAdvisorFor(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
+      .build()
+  }
 
 }
