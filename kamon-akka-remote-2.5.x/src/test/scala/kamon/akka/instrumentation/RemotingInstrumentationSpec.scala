@@ -70,7 +70,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
   "The Remoting instrumentation akka-2.5" should {
     "propagate the TraceContext when creating a new remote actor" in {
       Kamon.withContext(contextWithBroadcast("deploy-remote-actor-1")) {
-        system.actorOf(TraceTokenReplier.remoteProps(Some(testActor), RemoteSystemAddress), "remote-deploy-fixture")
+        val v = system.actorOf(TraceTokenReplier.remoteProps(Some(testActor), RemoteSystemAddress), "remote-deploy-fixture")
       }
 
       expectMsg("name=deploy-remote-actor-1")

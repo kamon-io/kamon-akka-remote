@@ -10,7 +10,7 @@ import kanela.agent.scala.KanelaInstrumentation
 
 class RemotingInstrumentation extends KanelaInstrumentation {
 
-  forTargetType("akka.remote.EndpointManager.Send") { builder ⇒
+  forTargetType("akka.remote.EndpointManager$Send") { builder ⇒
     builder
       .withMixin(classOf[HasTransientContextMixin])
       .withAdvisorFor(Constructor, classOf[SendConstructorAdvisor])
@@ -22,18 +22,18 @@ class RemotingInstrumentation extends KanelaInstrumentation {
       .withAdvisorFor(method("writeSend"), classOf[EndpointWriterWriteSendMethodAdvisor])
       .build()
   }
-//
-//  forTargetType("akka.actor.ActorCell") { builder ⇒
-//    builder
-//      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
-//      .build()
-//  }
-//
-//  forTargetType("akka.actor.UnstartedCell") { builder ⇒
-//    builder
-//      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
-//      .build()
-//  }
+
+  forTargetType("akka.actor.ActorCell") { builder ⇒
+    builder
+      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
+      .build()
+  }
+
+  forTargetType("akka.actor.UnstartedCell") { builder ⇒
+    builder
+      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
+      .build()
+  }
 
   forTargetType("akka.remote.transport.AkkaPduProtobufCodec$") { builder ⇒
     builder
@@ -44,8 +44,8 @@ class RemotingInstrumentation extends KanelaInstrumentation {
 
   forTargetType("akka.remote.MessageSerializer$") { builder =>
     builder
-        .withAdvisorFor(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
-        .withAdvisorFor(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
+      .withAdvisorFor(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
+      .withAdvisorFor(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
       .build()
   }
 

@@ -13,7 +13,7 @@ import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamWriter
 import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation.{Argument, RuntimeType, This}
 
-object  AkkaPduProtobufCodecConstructMessageMethodInterceptor {
+object AkkaPduProtobufCodecConstructMessageMethodInterceptor {
   @RuntimeType
   def aroundConstructMessage(@This unStartedCell: Object,
                              @Argument(0) localAddress: Address,
@@ -22,7 +22,6 @@ object  AkkaPduProtobufCodecConstructMessageMethodInterceptor {
                              @Argument(3) senderOption: OptionVal[ActorRef],
                              @Argument(4) seqOption: Option[SeqNo],
                              @Argument(5) ackOption: Option[Ack]): AnyRef = {
-
     val ackAndEnvelopeBuilder = AckAndContextAwareEnvelopeContainer.newBuilder
     val envelopeBuilder = ContextAwareRemoteEnvelope.newBuilder
 

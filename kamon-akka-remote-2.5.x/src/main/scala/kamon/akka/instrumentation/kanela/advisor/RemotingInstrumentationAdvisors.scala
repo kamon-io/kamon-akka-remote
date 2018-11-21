@@ -15,7 +15,7 @@ import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamReader
 
 /**
-  * Advisor for akka.remote.EndpointManager.Send::constructor
+  * Advisor for akka.remote.EndpointManager$Send::constructor
   */
 class SendConstructorAdvisor
 object SendConstructorAdvisor {
@@ -61,8 +61,8 @@ class AkkaPduProtobufCodecDecodeMessageMethodAdvisor
 object AkkaPduProtobufCodecDecodeMessageMethodAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
   def onEnter(@Argument(0) bs: ByteString,
-  @Argument(1) provider: RemoteActorRefProvider,
-  @Argument(2) localAddress: Address): Unit = {
+              @Argument(1) provider: RemoteActorRefProvider,
+              @Argument(2) localAddress: Address): Unit = {
     val ackAndEnvelope = AckAndContextAwareEnvelopeContainer.parseFrom(bs.toArray)
     if (ackAndEnvelope.hasEnvelope && ackAndEnvelope.getEnvelope.hasTraceContext) {
       val remoteCtx = ackAndEnvelope.getEnvelope.getTraceContext
@@ -80,7 +80,7 @@ object AkkaPduProtobufCodecDecodeMessageMethodAdvisor {
         val senderPath = ackAndEnvelope.getEnvelope.getSender.getPath
         if(senderPath.isEmpty) None else Some(AddressFromURIString(senderPath))
       },
-      size          = ackAndEnvelope.getEnvelope.getMessage.getMessage.size()
+      size = ackAndEnvelope.getEnvelope.getMessage.getMessage.size()
       )
     }
   }

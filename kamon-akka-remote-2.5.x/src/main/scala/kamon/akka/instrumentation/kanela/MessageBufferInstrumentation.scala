@@ -6,7 +6,7 @@ import kanela.agent.scala.KanelaInstrumentation
 
 class MessageBufferInstrumentation extends KanelaInstrumentation {
 
-  forTargetType("akka.util.MessageBuffer.Node") { builder ⇒
+  forTargetType("akka.util.MessageBuffer$Node") { builder ⇒
     builder
       .withMixin(classOf[HasTransientContextMixin])
       .withAdvisorFor(Constructor, classOf[MessageBufferNodeConstructorAdvisor])
