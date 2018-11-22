@@ -10,6 +10,7 @@ import kanela.agent.scala.KanelaInstrumentation
 
 class RemotingInstrumentation extends KanelaInstrumentation {
 
+  // TODO: akka.remote.EndpointManager$Send is final
   forTargetType("akka.remote.EndpointManager$Send") { builder ⇒
     builder
       .withMixin(classOf[HasTransientContextMixin])

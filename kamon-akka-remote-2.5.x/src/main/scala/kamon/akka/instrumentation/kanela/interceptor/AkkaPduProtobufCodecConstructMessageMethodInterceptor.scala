@@ -2,21 +2,20 @@ package akka.kamon.instrumentation.kanela.interceptor
 
 import java.io.ByteArrayOutputStream
 
-import akka.actor.{ActorRef, Address}
-import akka.remote.{Ack, SeqNo}
-import akka.remote.WireFormats.{AcknowledgementInfo, ActorRefData, AddressData, SerializedMessage}
-import akka.util.ByteString
 import akka.KamonOptionVal.OptionVal
+import akka.actor.{ActorRef, Address}
 import akka.remote.ContextAwareWireFormats.{AckAndContextAwareEnvelopeContainer, ContextAwareRemoteEnvelope, RemoteContext}
+import akka.remote.WireFormats.{AcknowledgementInfo, ActorRefData, AddressData, SerializedMessage}
+import akka.remote.{Ack, SeqNo}
+import akka.util.ByteString
 import kamon.Kamon
 import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamWriter
-import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation.{Argument, RuntimeType, This}
+import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation.{Argument, RuntimeType}
 
 object AkkaPduProtobufCodecConstructMessageMethodInterceptor {
   @RuntimeType
-  def aroundConstructMessage(@This unStartedCell: Object,
-                             @Argument(0) localAddress: Address,
+  def aroundConstructMessage(@Argument(0) localAddress: Address,
                              @Argument(1) recipient: ActorRef,
                              @Argument(2) serializedMessage: SerializedMessage,
                              @Argument(3) senderOption: OptionVal[ActorRef],
