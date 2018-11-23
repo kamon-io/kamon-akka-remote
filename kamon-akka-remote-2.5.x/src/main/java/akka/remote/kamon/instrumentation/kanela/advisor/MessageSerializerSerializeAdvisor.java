@@ -3,13 +3,14 @@ package akka.remote.kamon.instrumentation.kanela.advisor;
 import akka.actor.ExtendedActorSystem;
 import kamon.Kamon;
 import kamon.akka.RemotingMetrics;
+import kamon.akka.instrumentation.AkkaRemote$;
 import kanela.agent.libs.net.bytebuddy.asm.Advice;
 
 public class MessageSerializerSerializeAdvisor {
 
     @Advice.OnMethodEnter(suppress = Throwable.class)
     public static void onEnter(@Advice.Local("kamonNanos") Long kamonNanos) {
-        kamonNanos = Kamon.config().getBoolean("kamon.akka-remote.serialization-metric") ? Kamon.clock().nanos(): -1;
+        kamonNanos = AkkaRemote$.MODULE$.serializationInstrumentation() ? Kamon.clock().nanos(): -1;
     }
 
     @Advice.OnMethodExit(suppress = Throwable.class)
