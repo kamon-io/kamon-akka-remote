@@ -31,8 +31,8 @@ object SendConstructorAdvisor {
 class EndpointWriterWriteSendMethodAdvisor
 object EndpointWriterWriteSendMethodAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
-  def onEnter(@Argument(0) send: Send): Scope = {
-    Kamon.storeContext(send.asInstanceOf[HasContext].context)
+  def onEnter(@Argument(0) send: HasContext): Scope = {
+    Kamon.storeContext(send.context)
   }
 
   @OnMethodExit(suppress = classOf[Throwable])
@@ -86,39 +86,43 @@ object AkkaPduProtobufCodecDecodeMessageMethodAdvisor {
   }
 }
 
-
-/**
-  * Advisor for akka.remote.MessageSerializer$::serialize
-  */
-class MessageSerializerSerializeAdvisor
-object MessageSerializerSerializeAdvisor {
-  private lazy val serializationInstrumentation = Kamon.config().getBoolean("kamon.akka-remote.serialization-metric")
-
-  @OnMethodEnter(suppress = classOf[Throwable])
-  def onEnter(): Option[Long] =
-    if(serializationInstrumentation) Some(Kamon.clock().nanos()) else None
-
-  @OnMethodExit(suppress = classOf[Throwable])
-  def onExit(@Argument(0) system: ExtendedActorSystem, @Enter nanos: Option[Long]): Unit = {
-    nanos.foreach(start =>
-      RemotingMetrics.recordSerialization(system.name, Kamon.clock().nanos() - start))
-  }
-}
-
-/**
-  * Advisor for akka.remote.MessageSerializer$::deserialize
-  */
-class MessageSerializerDeserializeAdvisor
-object MessageSerializerDeserializeAdvisor {
-  private lazy val serializationInstrumentation = Kamon.config().getBoolean("kamon.akka-remote.serialization-metric")
-
-  @OnMethodEnter(suppress = classOf[Throwable])
-  def onEnter(): Option[Long] =
-    if(serializationInstrumentation) Some(Kamon.clock().nanos()) else None
-
-  @OnMethodExit(suppress = classOf[Throwable])
-  def onExit(@Argument(0) system: ExtendedActorSystem, @Enter nanos: Option[Long]): Unit = {
-    nanos.foreach(start =>
-      RemotingMetrics.recordSerialization(system.name, Kamon.clock().nanos() - start))
-  }
-}
+//
+///**
+//  * Advisor for akka.remote.MessageSerializer$::serialize
+//  */
+//class MessageSerializerSerializeAdvisor
+//object MessageSerializerSerializeAdvisor {
+//  //private lazy val serializationInstrumentation = Kamon.config().getBoolean("kamon.akka-remote.serialization-metric")
+//
+//  @OnMethodEnter(suppress = classOf[Throwable])
+//  def onEnter(): Long = {
+//    if (true) Kamon.clock().nanos() else -1
+//  }
+//
+//  @OnMethodExit(suppress = classOf[Throwable])
+//  def onExit(@Enter nanos: Long, @Argument(0) system: ExtendedActorSystem): Unit = {
+//    if(nanos >= 0) {
+//      RemotingMetrics.recordSerialization(system.name, Kamon.clock().nanos() - nanos)
+//    }
+//  }
+//}
+//
+///**
+//  * Advisor for akka.remote.MessageSerializer$::deserialize
+//  */
+//class MessageSerializerDeserializeAdvisor
+//object MessageSerializerDeserializeAdvisor {
+//  // private lazy val serializationInstrumentation = Kamon.config().getBoolean("kamon.akka-remote.serialization-metric")
+//
+//  @OnMethodEnter(suppress = classOf[Throwable])
+//  def onEnter(): Long = {
+//    if (true) Kamon.clock().nanos() else -1
+//  }
+//
+//  @OnMethodExit(suppress = classOf[Throwable])
+//  def onExit(@Enter nanos: Long, @Argument(0) system: ExtendedActorSystem): Unit = {
+//    if(nanos >= 0) {
+//      RemotingMetrics.recordDeserialization(system.name, Kamon.clock().nanos() - nanos)
+//    }
+//  }
+//}
