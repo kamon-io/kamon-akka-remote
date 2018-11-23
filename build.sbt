@@ -63,8 +63,6 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
   ))
   .enablePlugins(JavaAgent)
   .settings(javaAgents ++= resolveAgent)
-//  .settings(javaOptions += "-noverify")
-  .settings(javaOptions += "-Xverify:all")
   .settings(
     libraryDependencies ++=
       compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25) ++
