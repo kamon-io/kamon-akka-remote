@@ -1,23 +1,23 @@
 package akka.remote.kamon.instrumentation.kanela.advisor
 
 import _root_.kanela.agent.libs.net.bytebuddy.asm.Advice._
-import akka.actor.{Address, AddressFromURIString, ExtendedActorSystem}
+import akka.actor.{Address, AddressFromURIString}
 import akka.dispatch.sysmsg.SystemMessage
-import akka.remote.ContextAwareWireFormats.AckAndContextAwareEnvelopeContainer
+import akka.remote.RemoteActorRefProvider
+import akka.remote.instrumentation.ContextAwareWireFormats.AckAndContextAwareEnvelopeContainer
+import akka.util.ByteString
 import kamon.Kamon
+import kamon.akka.RemotingMetrics
 import kamon.akka.context.ContextContainer
+import kamon.context.BinaryPropagation.ByteStreamReader
 import kamon.context.Storage.Scope
 import kamon.instrumentation.Mixin.HasContext
-import akka.remote.EndpointManager.Send
-import akka.remote.RemoteActorRefProvider
-import akka.util.ByteString
-import kamon.akka.RemotingMetrics
-import kamon.context.BinaryPropagation.ByteStreamReader
 
 /**
   * Advisor for akka.remote.EndpointManager$Send::constructor
   */
 class SendConstructorAdvisor
+
 object SendConstructorAdvisor {
   @OnMethodExit(suppress = classOf[Throwable])
   def onExit(@This node: HasContext): Unit = {
@@ -29,6 +29,7 @@ object SendConstructorAdvisor {
   * Advisor for akka.remote.EndpointWriter::writeSend
   */
 class EndpointWriterWriteSendMethodAdvisor
+
 object EndpointWriterWriteSendMethodAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
   def onEnter(@Argument(0) send: HasContext): Scope = {
@@ -47,6 +48,7 @@ object EndpointWriterWriteSendMethodAdvisor {
   * Advisor for akka.actor.UnstartedCell::sendSystemMessage
   */
 class SendSystemMessageMethodAdvisor
+
 object SendSystemMessageMethodAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
   def onEnter(@Argument(0) msg: SystemMessage): Unit = {
@@ -58,6 +60,7 @@ object SendSystemMessageMethodAdvisor {
   * Advisor for akka.remote.transport.AkkaPduProtobufCodec$::decodeMessage
   */
 class AkkaPduProtobufCodecDecodeMessageMethodAdvisor
+
 object AkkaPduProtobufCodecDecodeMessageMethodAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
   def onEnter(@Argument(0) bs: ByteString,

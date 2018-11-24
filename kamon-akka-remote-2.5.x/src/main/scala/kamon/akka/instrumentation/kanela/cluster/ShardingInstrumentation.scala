@@ -3,13 +3,14 @@ package kamon.akka.instrumentation.kanela.cluster
 import akka.kamon.instrumentation.cluster.InjectedShardedType
 import akka.kamon.instrumentation.kanela.advisor.{ShardConstructorAdvisor, ShardRegionConstructorAdvisor, ShardRegionPostStopAdvisor}
 import akka.kamon.instrumentation.kanela.interceptor.{ShardReceiveInterceptor, ShardRegionReceiveInterceptor}
+import kamon.akka.instrumentation.kanela.AkkaVersionedFilter
 import kamon.akka.instrumentation.kanela.mixin.InjectedShardedTypeMixin
 import kanela.agent.scala.KanelaInstrumentation
 
-class ShardingInstrumentation extends KanelaInstrumentation {
+class ShardingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
 
   forTargetType("akka.cluster.sharding.ShardRegion") { builder ⇒
-    builder
+    filterAkkaVersion(builder)
         .withMixin(classOf[InjectedShardedTypeMixin])
         .withAdvisorFor(Constructor, classOf[ShardRegionConstructorAdvisor])
         .withInterceptorFor(method("receive"), ShardRegionReceiveInterceptor)
@@ -18,7 +19,7 @@ class ShardingInstrumentation extends KanelaInstrumentation {
   }
 
   forTargetType("akka.cluster.sharding.Shard") { builder ⇒
-    builder
+    filterAkkaVersion(builder)
       .withMixin(classOf[InjectedShardedTypeMixin])
       .withAdvisorFor(Constructor, classOf[ShardConstructorAdvisor])
       .withInterceptorFor(method("receive"), ShardReceiveInterceptor)

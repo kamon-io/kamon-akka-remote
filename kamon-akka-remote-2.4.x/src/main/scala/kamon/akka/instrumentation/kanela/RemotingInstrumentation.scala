@@ -1,6 +1,5 @@
 package kamon.akka.instrumentation.kanela
 
-import akka.kamon.akka.instrumentation.kanela.ReplaceWithMethodInterceptor
 import akka.kamon.instrumentation.kanela.advisor._
 import akka.kamon.instrumentation.kanela.interceptor.{AkkaPduProtobufCodecConstructMessageMethodInterceptor, InvokeAllMethodInterceptor}
 import akka.remote.kamon.instrumentation.kanela.advisor._
