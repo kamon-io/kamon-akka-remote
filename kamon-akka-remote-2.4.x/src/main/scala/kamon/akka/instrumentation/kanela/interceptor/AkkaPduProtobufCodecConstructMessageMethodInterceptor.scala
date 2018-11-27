@@ -13,6 +13,9 @@ import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamWriter
 import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation.{Argument, RuntimeType}
 
+/**
+  * Interceptor for akka.remote.transport.AkkaPduProtobufCodec$::constructMessage
+  */
 object AkkaPduProtobufCodecConstructMessageMethodInterceptor {
   @RuntimeType
   def aroundConstructMessage(@Argument(0) localAddress: Address,
