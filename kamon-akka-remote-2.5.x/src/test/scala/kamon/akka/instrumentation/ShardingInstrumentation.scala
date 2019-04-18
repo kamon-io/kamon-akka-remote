@@ -9,7 +9,7 @@ import akka.kamon.instrumentation.cluster.ShardingMetrics
 import akka.testkit.TestActor.Watch
 import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
-import kamon.testkit.MetricInspection
+import kamon.testkit.{InstrumentInspection, MetricInspection}
 import org.scalatest.concurrent.Eventually
 import org.scalatest.{Matchers, WordSpecLike}
 
@@ -23,7 +23,8 @@ class ShardingInstrumentationSpec
     with WordSpecLike
     with Matchers
     with ImplicitSender
-    with MetricInspection
+    with MetricInspection.Syntax
+    with InstrumentInspection.Syntax
     with Eventually {
   import ShardingMetrics._
 

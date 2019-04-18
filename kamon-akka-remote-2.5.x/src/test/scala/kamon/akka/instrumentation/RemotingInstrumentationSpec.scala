@@ -3,23 +3,25 @@ package kamon.instrumentation.akka
 import akka.actor.SupervisorStrategy.Resume
 import akka.actor._
 import akka.pattern.{ask, pipe}
-import akka.remote.RemoteScope
 import akka.routing.RoundRobinGroup
 import akka.testkit.{ImplicitSender, TestKitBase}
 import akka.util.Timeout
 import com.typesafe.config.ConfigFactory
 import kamon.Kamon
-import kamon.akka.RemotingMetrics
+import kamon.akka.{ContextTesting, RemotingMetrics}
 import kamon.context.Context
-import kamon.testkit.{ContextTesting, MetricInspection, StringBroadcastTag}
+import kamon.tag.TagSet
+import kamon.testkit.MetricInspection
+import kamon.testkit.InstrumentInspection
 import org.scalatest.{Matchers, WordSpecLike}
 import org.scalatest.Inspectors._
+import kamon.tag.Lookups._
 import org.scalatest.Matchers._
 
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
 
-class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
+class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection.Syntax with InstrumentInspection.Syntax {
 
   implicit lazy val system: ActorSystem = {
     ActorSystem("remoting-spec-local-system", ConfigFactory.parseString(
@@ -63,7 +65,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
   def contextWithBroadcast(name: String): Context =
     Context.Empty.withTag(
-      StringBroadcastTag,
+      TestTag,
       name
     )
 
@@ -141,23 +143,27 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
 
     "record in/out message counts and sizes for both sending and receiving side" in {
-      val outMetricTags = RemotingMetrics.messages.partialRefine(
-        Map(
-          "system"      -> system.name,
-          "direction"   -> "out",
-          "peer-system" -> remoteSystem.name
+      val outMetricTags = RemotingMetrics.messages.withTags(
+        TagSet.from(
+          Map(
+            "system"      -> system.name,
+            "direction"   -> "out",
+            "peer-system" -> remoteSystem.name
+          )
         )
       )
-      val inMetricTags = RemotingMetrics.messages.partialRefine(
-        Map(
-          "system"      -> remoteSystem.name,
-          "direction"   -> "in",
-          "peer-system" -> system.name
+      val inMetricTags = RemotingMetrics.messages.withTags(
+        TagSet.from(
+          Map(
+            "system"      -> remoteSystem.name,
+            "direction"   -> "in",
+            "peer-system" -> system.name
+          )
         )
       )
       val (out, in) = (
-        RemotingMetrics.messages.refine(outMetricTags.head).distribution(false),
-        RemotingMetrics.messages.refine(inMetricTags.head).distribution(false)
+        RemotingMetrics.messages.withTags(outMetricTags.tags).distribution(false),
+        RemotingMetrics.messages.withTags(inMetricTags.tags).distribution(false)
       )
       assert(out.max > 0)
       assert(in.max > 0)
@@ -172,8 +178,8 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       val histograms = for {
         sys <- systems
         dir <- directions
-      } yield RemotingMetrics.serialization.refine(
-        Map("system" -> sys, "direction" -> dir)
+      } yield RemotingMetrics.serialization.withTags(
+        TagSet.from(Map("system" -> sys, "direction" -> dir))
       ).distribution(false)
 
       val sizes = histograms.map(_.max)
@@ -202,7 +208,7 @@ class SupervisorOfRemote(traceContextListener: ActorRef, remoteAddress: Address)
 
   def currentTraceContextInfo: String = {
     val ctx = Kamon.currentContext()
-    val name = ctx.getTag(StringBroadcastTag).getOrElse("")
+    val name = ctx.getTag(option(TestTag)).getOrElse("")
     s"name=$name"
   }
 }

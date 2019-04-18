@@ -18,7 +18,7 @@ import kanela.agent.libs.net.bytebuddy.asm.Advice.{Argument, Enter, OnMethodEnte
 class SendConstructorAdvisor
 object SendConstructorAdvisor {
   @OnMethodExit(suppress = classOf[Throwable])
-  def onExit(@This node: HasContext): Unit = {
+  def onExit(@This node: ContextContainer): Unit = {
     node.context // forces initialization on the calling thread.
   }
 }
@@ -29,7 +29,7 @@ object SendConstructorAdvisor {
 class EndpointWriterWriteSendMethodAdvisor
 object EndpointWriterWriteSendMethodAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
-  def onEnter(@Argument(0) send: HasContext): Scope = {
+  def onEnter(@Argument(0) send: ContextContainer): Scope = {
     Kamon.storeContext(send.context)
   }
 

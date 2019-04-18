@@ -3,7 +3,8 @@ package kamon.instrumentation.akka
 import akka.actor._
 import akka.remote.RemoteScope
 import kamon.Kamon
-import kamon.testkit.{ContextTesting, StringBroadcastTag}
+import kamon.akka.ContextTesting
+import kamon.tag.Lookups._
 
 class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends Actor with ActorLogging with ContextTesting {
 
@@ -20,7 +21,7 @@ class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends 
 
   def currentTraceContextInfo: String = {
     val ctx = Kamon.currentContext()
-    val name = ctx.getTag(StringBroadcastTag).getOrElse("")
+    val name = ctx.getTag(option(TestTag)).getOrElse("")
     s"name=$name"
   }
 }

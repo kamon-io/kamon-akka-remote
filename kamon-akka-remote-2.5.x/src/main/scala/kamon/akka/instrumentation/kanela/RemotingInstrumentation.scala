@@ -1,6 +1,6 @@
 package kamon.akka.instrumentation.kanela
 
-import akka.kamon.instrumentation.kanela.interceptor.{AkkaPduProtobufCodecConstructMessageMethodInterceptor,}
+import akka.kamon.instrumentation.kanela.interceptor.AkkaPduProtobufCodecConstructMessageMethodInterceptor
 import akka.remote.kamon.instrumentation.kanela.advisor._
 import kamon.akka25.instrumentation.kanela.mixin.HasTransientContextMixin
 import kanela.agent.api.instrumentation.InstrumentationBuilder

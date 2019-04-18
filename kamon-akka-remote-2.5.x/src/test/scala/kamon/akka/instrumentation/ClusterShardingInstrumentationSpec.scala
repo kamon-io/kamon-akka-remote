@@ -6,11 +6,12 @@ import akka.cluster.sharding.{ClusterSharding, ClusterShardingSettings, ShardReg
 import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
 import kamon.Kamon
+import kamon.akka.ContextTesting
 import kamon.context.Context
-import kamon.testkit.{ContextTesting, MetricInspection, StringBroadcastTag}
+import kamon.testkit.MetricInspection
 import org.scalatest.{Matchers, WordSpecLike}
 
-class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with ContextTesting with MetricInspection {
+class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with MetricInspection.Syntax with ContextTesting {
 
   implicit lazy val system: ActorSystem = {
     ActorSystem("cluster-sharding-spec-system", ConfigFactory.parseString(
@@ -52,8 +53,7 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
 
   def contextWithBroadcast(name: String): Context =
     Context.Empty.withTag(
-      StringBroadcastTag,
-      name
+      TestTag, name
     )
 
   val extractEntityId: ShardRegion.ExtractEntityId = {
