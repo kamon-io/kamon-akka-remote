@@ -2,7 +2,6 @@ package kamon.akka.instrumentation.kanela.cluster
 
 import akka.kamon.instrumentation.kanela.advisor.{ShardConstructorAdvisor, ShardRegionConstructorAdvisor, ShardRegionPostStopAdvisor}
 import akka.kamon.instrumentation.kanela.interceptor.{ShardReceiveInterceptor, ShardRegionReceiveInterceptor}
-import kamon.akka.instrumentation.kanela.AkkaVersionedFilter
 import kamon.akka.instrumentation.kanela.mixin.InjectedShardedTypeMixin
 import kanela.agent.scala.KanelaInstrumentation
 

@@ -4,7 +4,7 @@ import akka.actor.Actor
 import akka.cluster.sharding.ShardCoordinator.Internal.HandOff
 import akka.cluster.sharding.{Shard, ShardRegion}
 import kamon.akka.Akka
-import kamon.util.GlobPathFilter
+import kamon.util.Filter
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.annotation._
 
@@ -27,7 +27,7 @@ class ShardingInstrumentation {
     val system = region.context.system
     val shardingGuardian = system.settings.config.getString("akka.cluster.sharding.guardian-name")
     val entitiesPath = s"${system.name}/system/$shardingGuardian/$typeName/*/*"
-    Akka.addActorGroup(regionGroupName(typeName), new GlobPathFilter(entitiesPath))
+    Akka.addActorGroup(regionGroupName(typeName), Filter.Glob(entitiesPath))
   }
 
   @Pointcut("execution(* akka.cluster.sharding.ShardRegion.receive()) && this(region)")

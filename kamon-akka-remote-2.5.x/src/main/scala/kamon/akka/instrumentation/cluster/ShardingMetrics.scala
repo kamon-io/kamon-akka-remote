@@ -9,6 +9,7 @@ import akka.cluster.sharding.Shard
 import com.typesafe.config.Config
 import kamon.Configuration.OnReconfigureHook
 import kamon.Kamon
+import kamon.tag.TagSet
 
 import scala.collection.concurrent.TrieMap
 
@@ -24,22 +25,22 @@ object ShardingMetrics {
   private val shardEntities = Kamon.histogram(s"$prefix.shard.hosted-entities")
   private val shardMessages = Kamon.histogram(s"$prefix.shard.processed-messages")
 
-  def byRegion(regionType: String) = ("type" -> regionType)
+  def byRegion(regionType: String): TagSet = TagSet.of("type", regionType)
 
   def shardsPerRegion(regionType: String) =
-    regionShards.refine(byRegion(regionType))
+    regionShards.withTags(byRegion(regionType))
 
   def entitiesPerRegion(regionType: String) =
-    regionEntities.refine(byRegion(regionType))
+    regionEntities.withTags(byRegion(regionType))
 
   def entitiesPerShard(regionType: String) =
-    shardEntities.refine(byRegion(regionType))
+    shardEntities.withTags(byRegion(regionType))
 
   def messagesPerRegion(regionType: String) =
-    regionMessages.refine(byRegion(regionType))
+    regionMessages.withTags(byRegion(regionType))
 
   def messagesPerShard(regionType: String) =
-    shardMessages.refine(byRegion(regionType))
+    shardMessages.withTags(byRegion(regionType))
 
   def forType(shardedType: String): ShardRegionMonitor =
     instruments.getOrElseUpdate(shardedType, {

@@ -13,9 +13,10 @@
  * =========================================================================================
  */
 
-val kamonVersion        = "1.2.0-M1"
+
+val kamonVersion        = "2.0.0-07ebec0a2acd1ecd22a6cf41cb770e8daf39e3cc"
 val kamonScalaVersion   = "1.1.0-M1"
-val kamonAkkaVersion    = "1.1.3-6701c3cbad5cf6a83304cf6e8095e0ef92ef0926"
+//val kamonAkkaVersion    = "2.0.0-2d81d60ba70c421d3a07b873f14de20923190094"
 
 val akka24Version       = "2.4.20"
 val akka25Version       = "2.5.13"
@@ -23,8 +24,8 @@ val akka25Version       = "2.5.13"
 val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
 val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"         % kamonVersion
 val kamonScala          = "io.kamon"                    %%  "kamon-scala-future"    % kamonScalaVersion
-val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
-val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % kamonAkkaVersion
+val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % "2.0.0-2d81d60ba70c421d3a07b873f14de20923190094"
+val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % "1.1.3"
 
 val kanelaScalaExtension  = "io.kamon"  %%  "kanela-scala-extension"  % "0.0.14"
 
@@ -60,7 +61,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
     moduleName := "kamon-akka-remote-2.5",
   ))
   .enablePlugins(JavaAgent)
-  .settings(javaAgents ++= resolveAgent)
+  .settings(javaAgents += "io.kamon" % "kanela-agent" % "0.0.15" % "compile;test")
   .settings(
     libraryDependencies ++=
       compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25) ++
@@ -81,6 +82,7 @@ lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-re
         providedScope(akkaSharding24, akkaDData24, aspectJ) ++
         optionalScope(logbackClassic) ++
         testScope(akkaSharding24, scalatest, akkaTestKit24, akkaSlf4j24, logbackClassic, kamonTestkit))
+
 
 def resolveAgent: Seq[ModuleID] = {
   val agent = Option(System.getProperty("agent")).getOrElse("aspectj")

@@ -3,6 +3,7 @@ package kamon.akka
 import akka.actor.Address
 import kamon.Kamon
 import kamon.metric.MeasurementUnit
+import kamon.tag.TagSet
 
 object RemotingMetrics {
   val messages = Kamon.histogram("akka.remote.message-size", MeasurementUnit.information.bytes)
@@ -25,26 +26,34 @@ object RemotingMetrics {
       port <- addr.port
     } yield host+":"+port
 
-    messages.refine(
-      Map(
-        "system"      -> localAddress.system,
-        "host"        -> localHost.getOrElse(""),
-        "direction"   -> direction,
-        "peer-system" -> peerAddress.map(_.system).getOrElse(""),
-        "peer-host"   -> peerHost.getOrElse("")
+    messages.withTags(
+      TagSet.from(
+        Map(
+          "system"      -> localAddress.system,
+          "host"        -> localHost.getOrElse(""),
+          "direction"   -> direction,
+          "peer-system" -> peerAddress.map(_.system).getOrElse(""),
+          "peer-host"   -> peerHost.getOrElse("")
+        )
       )
     ).record(size)
   }
 
-  def recordSerialization(system: String, time: Long) = serialization.refine(Map(
-    "system" -> system,
-    "direction" -> "out"
-  )).record(time)
+  def recordSerialization(system: String, time: Long) = serialization.withTags(
+    TagSet.from(Map(
+      "system" -> system,
+      "direction" -> "out"
+    ))
+  ).record(time)
 
-  def recordDeserialization(system: String, time: Long) = serialization.refine(Map(
-    "system" -> system,
-    "direction" -> "in"
-  )).record(time)
+  def recordDeserialization(system: String, time: Long) = serialization.withTags(
+    TagSet.from(
+      Map(
+        "system" -> system,
+        "direction" -> "in"
+      )
+    )
+  ).record(time)
 
 
 
