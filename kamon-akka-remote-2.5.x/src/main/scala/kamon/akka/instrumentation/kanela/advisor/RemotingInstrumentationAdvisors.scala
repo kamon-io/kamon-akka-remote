@@ -1,18 +1,16 @@
 package akka.remote.kamon.instrumentation.kanela.advisor
 
-import _root_.kanela.agent.libs.net.bytebuddy.asm.Advice._
 import akka.actor.{Address, AddressFromURIString, ExtendedActorSystem}
 import akka.dispatch.sysmsg.SystemMessage
 import akka.remote.ContextAwareWireFormats.AckAndContextAwareEnvelopeContainer
 import kamon.Kamon
 import kamon.akka.context.ContextContainer
 import kamon.context.Storage.Scope
-import kamon.instrumentation.Mixin.HasContext
-import akka.remote.EndpointManager.Send
 import akka.remote.RemoteActorRefProvider
 import akka.util.ByteString
 import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamReader
+import kanela.agent.libs.net.bytebuddy.asm.Advice.{Argument, Enter, OnMethodEnter, OnMethodExit, This}
 
 /**
   * Advisor for akka.remote.EndpointManager$Send::constructor

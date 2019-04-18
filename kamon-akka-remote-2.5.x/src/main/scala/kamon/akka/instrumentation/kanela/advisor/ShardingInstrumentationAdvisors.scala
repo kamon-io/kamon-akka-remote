@@ -4,8 +4,8 @@ import _root_.kanela.agent.libs.net.bytebuddy.asm.Advice._
 import akka.cluster.sharding.{Shard, ShardRegion}
 import akka.kamon.instrumentation.cluster.{ShardedType, ShardingMetrics}
 import kamon.akka.Akka
-import kamon.util.GlobPathFilter
 import kamon.akka.instrumentation.kanela.cluster.ShardingInstrumentation.regionGroupName
+import kamon.util.Filter.Glob
 
 class ShardRegionConstructorAdvisor
 object ShardRegionConstructorAdvisor {
@@ -20,7 +20,7 @@ object ShardRegionConstructorAdvisor {
     val system = region.context.system
     val shardingGuardian = system.settings.config.getString("akka.cluster.sharding.guardian-name")
     val entitiesPath = s"${system.name}/system/$shardingGuardian/$typeName/*/*"
-    Akka.addActorGroup(regionGroupName(typeName), new GlobPathFilter(entitiesPath))
+    Akka.addActorGroup(regionGroupName(typeName), Glob(entitiesPath))
   }
 
 }

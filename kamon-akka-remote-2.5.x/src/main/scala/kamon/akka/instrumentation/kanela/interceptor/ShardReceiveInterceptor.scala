@@ -8,6 +8,7 @@ import akka.cluster.sharding.ShardCoordinator.Internal.HandOff
 import akka.kamon.instrumentation.cluster.{ShardedType, ShardingMetrics}
 import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation._
 
+class ShardReceiveInterceptor
 object ShardReceiveInterceptor {
   @RuntimeType
   def aroundReceive(@SuperCall callable: Callable[_], @This shard: ShardedType): AnyRef = {

@@ -1,14 +1,11 @@
 package kamon.akka.instrumentation.kanela
 
-import akka.kamon.akka.instrumentation.kanela.ReplaceWithMethodInterceptor
-import akka.kamon.instrumentation.kanela.advisor._
-import akka.kamon.instrumentation.kanela.interceptor.{AkkaPduProtobufCodecConstructMessageMethodInterceptor, InvokeAllMethodInterceptor}
+import akka.kamon.instrumentation.kanela.interceptor.{AkkaPduProtobufCodecConstructMessageMethodInterceptor,}
 import akka.remote.kamon.instrumentation.kanela.advisor._
-import kamon.Kamon
-import kamon.akka.instrumentation.kanela.mixin.{ActorInstrumentationMixin, HasTransientContextMixin}
-import kanela.agent.scala.KanelaInstrumentation
+import kamon.akka25.instrumentation.kanela.mixin.HasTransientContextMixin
+import kanela.agent.api.instrumentation.InstrumentationBuilder
 
-class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
+class RemotingInstrumentation extends InstrumentationBuilder {
   /**
     * Instrument:
     *
@@ -19,12 +16,9 @@ class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFi
     * akka.remote.EndpointManager$Send with kamon.akka.instrumentation.kanela.mixin.HasTransientContextMixin
     *
     */
-  forTargetType("akka.remote.EndpointManager$Send") { builder ⇒
-    filterAkkaVersion(builder)
-      .withMixin(classOf[HasTransientContextMixin])
-      .withAdvisorFor(Constructor, classOf[SendConstructorAdvisor])
-      .build()
-  }
+  onType("akka.remote.EndpointManager$Send")
+    .mixin(classOf[HasTransientContextMixin])
+    .advise(isConstructor, classOf[SendConstructorAdvisor])
 
   /**
     * Instrument:
@@ -32,11 +26,8 @@ class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFi
     * akka.remote.EndpointWriter::writeSend
     *
     */
-  forTargetType("akka.remote.EndpointWriter") { builder ⇒
-    filterAkkaVersion(builder)
-      .withAdvisorFor(method("writeSend"), classOf[EndpointWriterWriteSendMethodAdvisor])
-      .build()
-  }
+  onType("akka.remote.EndpointWriter")
+    .advise(method("writeSend"), classOf[EndpointWriterWriteSendMethodAdvisor])
 
   /**
     * Instrument:
@@ -44,11 +35,8 @@ class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFi
     * akka.actor.ActorCell::sendSystemMessage
     *
     */
-  forTargetType("akka.actor.ActorCell") { builder ⇒
-    filterAkkaVersion(builder)
-      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
-      .build()
-  }
+  onType("akka.actor.ActorCell")
+    .advise(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
 
   /**
     * Instrument:
@@ -56,11 +44,9 @@ class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFi
     * akka.actor.UnstartedCell::sendSystemMessage
     *
     */
-  forTargetType("akka.actor.UnstartedCell") { builder ⇒
-    filterAkkaVersion(builder)
-      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
-      .build()
-  }
+  onType("akka.actor.UnstartedCell")
+    .advise(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
+
 
   /**
     * Instrument:
@@ -69,12 +55,9 @@ class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFi
     * akka.remote.transport.AkkaPduProtobufCodec$::decodeMessage
     *
     */
-  forTargetType("akka.remote.transport.AkkaPduProtobufCodec$") { builder ⇒
-    filterAkkaVersion(builder)
-      .withInterceptorFor(method("constructMessage"), AkkaPduProtobufCodecConstructMessageMethodInterceptor)
-      .withAdvisorFor(method("decodeMessage"), classOf[AkkaPduProtobufCodecDecodeMessageMethodAdvisor])
-      .build()
-  }
+  onType("akka.remote.transport.AkkaPduProtobufCodec$")
+    .intercept(method("constructMessage"), classOf[AkkaPduProtobufCodecConstructMessageMethodInterceptor])
+    .advise(method("decodeMessage"), classOf[AkkaPduProtobufCodecDecodeMessageMethodAdvisor])
 
   /**
     * Instrument:
@@ -83,11 +66,8 @@ class RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFi
     * akka.remote.MessageSerializer$::deserialize
     *
     */
-  forTargetType("akka.remote.MessageSerializer$") { builder =>
-    filterAkkaVersion(builder)
-      .withAdvisorFor(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
-      .withAdvisorFor(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
-      .build()
-  }
+  onType("akka.remote.MessageSerializer$")
+    .advise(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
+    .advise(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
 
 }

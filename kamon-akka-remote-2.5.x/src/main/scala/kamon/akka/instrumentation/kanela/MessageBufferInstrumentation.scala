@@ -1,10 +1,11 @@
 package kamon.akka.instrumentation.kanela
 
 import kamon.akka.instrumentation.kanela.advisor.{MessageBufferNodeConstructorAdvisor, MessageBufferNodeMethodApplyAdvisor}
-import kamon.akka.instrumentation.kanela.mixin.HasTransientContextMixin
+import kamon.akka25.instrumentation.kanela.mixin.HasTransientContextMixin
 import kanela.agent.scala.KanelaInstrumentation
+import kanela.agent.api.instrumentation.InstrumentationBuilder
 
-class MessageBufferInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
+class MessageBufferInstrumentation extends InstrumentationBuilder {
 
   /**
     * Instrument:
@@ -17,12 +18,9 @@ class MessageBufferInstrumentation extends KanelaInstrumentation with AkkaVersio
     * akka.util.MessageBuffer$Node with kamon.akka.instrumentation.kanela.mixin.HasTransientContextMixin
     *
     */
-  forTargetType("akka.util.MessageBuffer$Node") { builder ⇒
-    filterAkkaVersion(builder)
-      .withMixin(classOf[HasTransientContextMixin])
-      .withAdvisorFor(Constructor, classOf[MessageBufferNodeConstructorAdvisor])
-      .withAdvisorFor(method("apply"), classOf[MessageBufferNodeMethodApplyAdvisor])
-      .build()
-  }
+  onType("akka.util.MessageBuffer$Node")
+    .mixin(classOf[HasTransientContextMixin])
+    .advise(isConstructor, classOf[MessageBufferNodeConstructorAdvisor])
+    .advise(method("apply"), classOf[MessageBufferNodeMethodApplyAdvisor])
 
 }

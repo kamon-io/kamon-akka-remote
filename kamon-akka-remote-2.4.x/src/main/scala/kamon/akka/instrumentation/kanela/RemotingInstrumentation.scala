@@ -2,11 +2,9 @@ package kamon.akka.instrumentation.kanela
 
 import akka.kamon.instrumentation.kanela.interceptor.AkkaPduProtobufCodecConstructMessageMethodInterceptor
 import akka.remote.kamon.instrumentation.kanela.advisor._
-import kamon.akka.instrumentation.kanela.mixin.HasTransientContextMixin
 import kanela.agent.scala.KanelaInstrumentation
 
-class
-RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
+class RemotingInstrumentation extends KanelaInstrumentation  {
   /**
     * Instrument:
     *
@@ -20,7 +18,7 @@ RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
   forTargetType("akka.remote.EndpointManager$Send") { builder ⇒
     filterAkkaVersion(builder)
       .withMixin(classOf[HasTransientContextMixin])
-      .withAdvisorFor(Constructor, classOf[SendConstructorAdvisor])
+      .advise(Constructor, classOf[SendConstructorAdvisor])
       .build()
   }
 
@@ -32,7 +30,7 @@ RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
     */
   forTargetType("akka.remote.EndpointWriter") { builder ⇒
     filterAkkaVersion(builder)
-      .withAdvisorFor(method("writeSend"), classOf[EndpointWriterWriteSendMethodAdvisor])
+      .advise(method("writeSend"), classOf[EndpointWriterWriteSendMethodAdvisor])
       .build()
   }
 
@@ -44,7 +42,7 @@ RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
     */
   forTargetType("akka.actor.ActorCell") { builder ⇒
     filterAkkaVersion(builder)
-      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
+      .advise(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
       .build()
   }
 
@@ -56,7 +54,7 @@ RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
     */
   forTargetType("akka.actor.UnstartedCell") { builder ⇒
     filterAkkaVersion(builder)
-      .withAdvisorFor(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
+      .advise(method("sendSystemMessage"), classOf[SendSystemMessageMethodAdvisor])
       .build()
   }
 
@@ -70,7 +68,7 @@ RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
   forTargetType("akka.remote.transport.AkkaPduProtobufCodec$") { builder ⇒
     filterAkkaVersion(builder)
       .withInterceptorFor(method("constructMessage"), AkkaPduProtobufCodecConstructMessageMethodInterceptor)
-      .withAdvisorFor(method("decodeMessage"), classOf[AkkaPduProtobufCodecDecodeMessageMethodAdvisor])
+      .advise(method("decodeMessage"), classOf[AkkaPduProtobufCodecDecodeMessageMethodAdvisor])
       .build()
   }
 
@@ -83,8 +81,8 @@ RemotingInstrumentation extends KanelaInstrumentation with AkkaVersionedFilter {
     */
   forTargetType("akka.remote.MessageSerializer$") { builder =>
     filterAkkaVersion(builder)
-      .withAdvisorFor(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
-      .withAdvisorFor(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
+      .advise(method("serialize"), classOf[MessageSerializerSerializeAdvisor])
+      .advise(method("deserialize"), classOf[MessageSerializerDeserializeAdvisor])
       .build()
   }
 

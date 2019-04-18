@@ -19,8 +19,8 @@ class MessageBufferInstrumentation extends KanelaInstrumentation with AkkaVersio
   forTargetType("akka.util.MessageBuffer$Node") { builder ⇒
     filterAkkaVersion(builder)
       .withMixin(classOf[HasTransientContextMixin])
-      .withAdvisorFor(Constructor, classOf[MessageBufferNodeConstructorAdvisor])
-      .withAdvisorFor(method("apply"), classOf[MessageBufferNodeMethodApplyAdvisor])
+      .advise(Constructor, classOf[MessageBufferNodeConstructorAdvisor])
+      .advise(method("apply"), classOf[MessageBufferNodeMethodApplyAdvisor])
       .build()
   }
 
