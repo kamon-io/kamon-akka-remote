@@ -28,7 +28,7 @@ val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"    
 val kamonAkka24         = "io.kamon"                    %%  "kamon-akka-2.4"        % "1.1.3"
 
 val kanelaScalaExtension  = "io.kamon"  %%  "kanela-scala-extension"  % "0.0.14"
-val lastKanelaAgent =  "io.kamon" % "kanela-agent" % "0.0.18-SNAPSHOT" changing()
+val lastKanelaAgent       =  "io.kamon" % "kanela-agent" % "0.0.18-SNAPSHOT" changing()
 
 val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
 val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
@@ -54,8 +54,6 @@ parallelExecution in Test in Global := false
 
 lazy val `kamon-akka-remote` = (project in file("."))
   .settings(noPublishing: _*)
-  .enablePlugins(JavaAgent)
-  .settings(javaAgents += lastKanelaAgent)
   .aggregate(kamonAkkaRemote24, kamonAkkaRemote25)
 
 
@@ -65,12 +63,14 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
     moduleName := "kamon-akka-remote-2.5",
     resolvers += Resolver.mavenLocal
   ))
+  .enablePlugins(JavaAgent)
+  .settings(javaAgents += lastKanelaAgent % "compile;test")
   .settings(
     libraryDependencies ++=
       compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25, lastKanelaAgent) ++
         providedScope(akkaSharding25, aspectJ) ++
         optionalScope(logbackClassic) ++
-        testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit))
+        testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit, lastKanelaAgent))
 
 
 lazy val kamonAkkaRemote24 = Project("kamon-akka-remote-24", file("kamon-akka-remote-2.4.x"))
