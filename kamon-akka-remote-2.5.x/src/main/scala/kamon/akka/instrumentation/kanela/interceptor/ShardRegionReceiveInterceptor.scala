@@ -7,8 +7,7 @@ import akka.cluster.sharding.ShardRegion
 import akka.kamon.instrumentation.cluster.{ShardedType, ShardingMetrics}
 import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation._
 
-class ShardRegionReceiveInterceptor
-object ShardRegionReceiveInterceptor {
+class ShardRegionReceiveInterceptor {
   @RuntimeType
   def aroundReceive(@SuperCall callable: Callable[_], @This region: ShardedType): AnyRef = {
     val identifiedRegion = region.asInstanceOf[ShardedType]

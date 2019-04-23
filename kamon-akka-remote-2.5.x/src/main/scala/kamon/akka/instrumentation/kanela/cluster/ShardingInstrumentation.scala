@@ -22,7 +22,7 @@ class ShardingInstrumentation extends InstrumentationBuilder {
   onType("akka.cluster.sharding.ShardRegion")
     .mixin(classOf[InjectedShardedTypeMixin])
     .advise(isConstructor, classOf[ShardRegionConstructorAdvisor])
-    .intercept(method("receive"), classOf[ShardRegionReceiveInterceptor])
+    .intercept(method("receive"), new ShardRegionReceiveInterceptor)
     .advise(method("postStop"), classOf[ShardRegionPostStopAdvisor])
 
   /**
@@ -39,7 +39,7 @@ class ShardingInstrumentation extends InstrumentationBuilder {
   onType("akka.cluster.sharding.Shard")
     .mixin(classOf[InjectedShardedTypeMixin])
     .advise(isConstructor, classOf[ShardConstructorAdvisor])
-    .intercept(method("receive"), classOf[ShardReceiveInterceptor])
+    .intercept(method("receive"), new ShardReceiveInterceptor)
 
 }
 

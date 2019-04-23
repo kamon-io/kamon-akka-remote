@@ -56,7 +56,7 @@ class RemotingInstrumentation extends InstrumentationBuilder {
     *
     */
   onType("akka.remote.transport.AkkaPduProtobufCodec$")
-    .intercept(method("constructMessage"), classOf[AkkaPduProtobufCodecConstructMessageMethodInterceptor])
+    .intercept(method("constructMessage"), new AkkaPduProtobufCodecConstructMessageMethodInterceptor)
     .advise(method("decodeMessage"), classOf[AkkaPduProtobufCodecDecodeMessageMethodAdvisor])
 
   /**

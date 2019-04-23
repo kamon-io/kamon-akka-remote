@@ -16,8 +16,7 @@ import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation.{Argument,
 /**
   * Interceptor for akka.remote.transport.AkkaPduProtobufCodec$::constructMessage
   */
-class AkkaPduProtobufCodecConstructMessageMethodInterceptor
-object AkkaPduProtobufCodecConstructMessageMethodInterceptor {
+class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
   @RuntimeType
   def aroundConstructMessage(@Argument(0) localAddress: Address,
                              @Argument(1) recipient: ActorRef,

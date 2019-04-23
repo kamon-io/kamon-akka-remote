@@ -26,7 +26,7 @@ val kamonScala          = "io.kamon"                    %%  "kamon-scala-future"
 val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
 
 val kanelaScalaExtension  = "io.kamon"  %%  "kanela-scala-extension"  % "0.0.14"
-val kanelaAgent       =  "io.kamon" % "kanela-agent" % "0.0.19-SNAPSHOT" changing()
+val kanelaAgent       =  "io.kamon" % "kanela-agent" % "0.0.21-SNAPSHOT" changing()
 
 val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
 val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
