@@ -106,11 +106,13 @@ class ShardRegionMonitor(shardedType: String) {
     messagesPerRegion(shardedType).increment()
 
   def shardStarted(shardRef: ActorRef, shard: Shard) = {
+    println(s"SHARD STARTED ${shardedType} ${shardsPerRegion(shardedType).tags}")
     shardsPerRegion(shardedType).increment
     shards.put(shardRef, (shard, new LongAdder))
   }
 
   def shardStopped(shardRef: ActorRef): Unit = {
+    println(s"SHARD STOPED ${shardedType}")
     shards.remove(shardRef)
     shardsPerRegion(shardedType).decrement()
   }

@@ -11,11 +11,13 @@ import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
 import kamon.testkit.{InstrumentInspection, MetricInspection}
 import org.scalatest.concurrent.Eventually
-import org.scalatest.{Matchers, WordSpecLike}
+import org.scalatest.{Matchers, WordSpecLike, time}
 
 import scala.collection.immutable
 import scala.concurrent.Future
 import scala.util.Random
+import org.scalatest.time._
+
 case class TestMessage(shard: String, entity: String)
 
 class ShardingInstrumentationSpec
@@ -42,7 +44,6 @@ class ShardingInstrumentationSpec
         |      port = 2551
         |    }
         |  }
-        |  loglevel = "DEBUG"
         |  cluster {
         |    seed-nodes = ["akka.tcp://sharding@127.0.0.1:2551"]
         |    log-info = on
@@ -105,10 +106,11 @@ class ShardingInstrumentationSpec
 
       (1 to 3).foreach(_ => expectMsg("OK"))
 
-      eventually {
-        shardsPerRegion(shardType).distribution(true).max should be(2)
-        entitiesPerRegion(shardType).distribution(true).max should be(3)
+      eventually(timeout(Span(2, Seconds))) {
+        shardsPerRegion(shardType).distribution(false).max should be(2)
+        entitiesPerRegion(shardType).distribution(false).max should be(3)
       }
+
 
       val shardentityDistribution = entitiesPerShard(shardType).distribution(true)
       shardentityDistribution.max should be(2)
@@ -121,16 +123,16 @@ class ShardingInstrumentationSpec
       region ! TestMessage("s1", "e1")
       expectMsg("OK")
 
-      eventually {
-        shardsPerRegion(shardType).distribution(true).max should be(1)
-        entitiesPerRegion(shardType).distribution(true).max should be(1)
-        entitiesPerShard(shardType).distribution(true).max should be(1)
+      eventually(timeout(Span(2, Seconds))) {
+        shardsPerRegion(shardType).distribution(false).max should be(1)
+        entitiesPerRegion(shardType).distribution(false).max should be(1)
+        entitiesPerShard(shardType).distribution(false).max should be(1)
       }
 
       region ! HandOff("s1")
       expectMsg(ShardStopped("s1"))
 
-      eventually {
+      eventually(timeout(Span(2, Seconds))) {
         shardsPerRegion(shardType).distribution(true).max should be(0)
         entitiesPerRegion(shardType).distribution(true).max should be (0)
       }
@@ -140,7 +142,7 @@ class ShardingInstrumentationSpec
       region ! TestMessage("s1", "e1")
       expectMsg("OK")
 
-      eventually {
+      eventually(timeout(Span(2, Seconds))) {
         shardsPerRegion(shardType).distribution(true).max should be(1)
         entitiesPerShard(shardType).distribution(true).max should be(1)
         entitiesPerRegion(shardType).distribution(true).max should be(1)
@@ -156,7 +158,6 @@ class ShardingInstrumentationSpec
         entitiesPerRegion(shardType).distribution(true).max should be(0)
       }
     }
-
   }
 
 }
