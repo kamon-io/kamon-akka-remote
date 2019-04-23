@@ -16,7 +16,6 @@ import kamon.testkit.InstrumentInspection
 import org.scalatest.{Matchers, WordSpecLike}
 import org.scalatest.Inspectors._
 import kamon.tag.Lookups._
-import org.scalatest.Matchers._
 
 import scala.concurrent.duration._
 import scala.util.control.NonFatal
@@ -27,8 +26,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
     ActorSystem("remoting-spec-local-system", ConfigFactory.parseString(
       """
         |akka {
-        |  loggers = ["akka.event.slf4j.Slf4jLogger"]
-        |
         |  actor {
         |    provider = "akka.remote.RemoteActorRefProvider"
         |  }
@@ -46,8 +43,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
   val remoteSystem: ActorSystem = ActorSystem("remoting-spec-remote-system", ConfigFactory.parseString(
     """
       |akka {
-      |  loggers = ["akka.event.slf4j.Slf4jLogger"]
-      |
       |  actor {
       |    provider = "akka.remote.RemoteActorRefProvider"
       |  }
@@ -71,13 +66,13 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
   "The Remoting instrumentation akka-2.5" should {
     "propagate the TraceContext when creating a new remote actor" in {
-      Kamon.withContext(contextWithBroadcast("deploy-remote-actor-1")) {
-        val v = system.actorOf(TraceTokenReplier.remoteProps(Some(testActor), RemoteSystemAddress), "remote-deploy-fixture")
+      val a = Kamon.withContext(contextWithBroadcast("deploy-remote-actor-1")) {
+        system.actorOf(TraceTokenReplier.remoteProps(Some(testActor), RemoteSystemAddress), "remote-deploy-fixture")
       }
 
-      expectMsg("name=deploy-remote-actor-1")
+      expectMsg(10 seconds, "name=deploy-remote-actor-1")
     }
-/*
+
 
     "propagate the TraceContext when sending a message to a remotely deployed actor" in {
       val remoteRef = system.actorOf(TraceTokenReplier.remoteProps(None, RemoteSystemAddress), "remote-message-fixture")
@@ -100,6 +95,8 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
       expectMsg("name=ask-and-pipe-remote-actor-1")
     }
+
+
     "propagate the TraceContext when sending a message to an ActorSelection" in {
       remoteSystem.actorOf(TraceTokenReplier.props(None), "actor-selection-target-a")
       remoteSystem.actorOf(TraceTokenReplier.props(None), "actor-selection-target-b")
@@ -149,7 +146,9 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
           Map(
             "system"      -> system.name,
             "direction"   -> "out",
-            "peer-system" -> remoteSystem.name
+            "peer-system" -> remoteSystem.name,
+            "host"        -> "127.0.0.1:2552",
+            "peer-host"   -> "127.0.0.1:2553"
           )
         )
       )
@@ -158,14 +157,18 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
           Map(
             "system"      -> remoteSystem.name,
             "direction"   -> "in",
-            "peer-system" -> system.name
+            "peer-system" -> system.name,
+            "host"        -> "127.0.0.1:2553",
+            "peer-host"   -> "127.0.0.1:2552"
           )
         )
       )
+
       val (out, in) = (
         RemotingMetrics.messages.withTags(outMetricTags.tags).distribution(false),
         RemotingMetrics.messages.withTags(inMetricTags.tags).distribution(false)
       )
+
       assert(out.max > 0)
       assert(in.max > 0)
       assert(out.count > 0)
@@ -188,7 +191,6 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       forAll(sizes) { s => assert(s > 0) }
     }
 
-*/
 
   }
 

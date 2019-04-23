@@ -7,7 +7,6 @@ import kamon.akka.ContextTesting
 import kamon.tag.Lookups._
 
 class TraceTokenReplier(creationTraceContextListener: Option[ActorRef]) extends Actor with ActorLogging with ContextTesting {
-
   creationTraceContextListener foreach { recipient ⇒
     recipient ! currentTraceContextInfo
   }

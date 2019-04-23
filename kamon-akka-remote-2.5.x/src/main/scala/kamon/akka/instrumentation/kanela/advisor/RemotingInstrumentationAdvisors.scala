@@ -3,6 +3,7 @@ package akka.remote.kamon.instrumentation.kanela.advisor
 import akka.actor.{Address, AddressFromURIString, ExtendedActorSystem}
 import akka.dispatch.sysmsg.SystemMessage
 import akka.remote.ContextAwareWireFormats.AckAndContextAwareEnvelopeContainer
+import akka.remote.EndpointManager.Send
 import kamon.Kamon
 import kamon.akka.context.ContextContainer
 import kamon.context.Storage.Scope
@@ -10,6 +11,7 @@ import akka.remote.RemoteActorRefProvider
 import akka.util.ByteString
 import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamReader
+import kanela.agent.libs.net.bytebuddy.asm.Advice
 import kanela.agent.libs.net.bytebuddy.asm.Advice.{Argument, Enter, OnMethodEnter, OnMethodExit, This}
 
 /**
@@ -26,16 +28,16 @@ object SendConstructorAdvisor {
 /**
   * Advisor for akka.remote.EndpointWriter::writeSend
   */
-class EndpointWriterWriteSendMethodAdvisor
 object EndpointWriterWriteSendMethodAdvisor {
-  @OnMethodEnter(suppress = classOf[Throwable])
-  def onEnter(@Argument(0) send: ContextContainer): Scope = {
-    Kamon.storeContext(send.context)
+
+  @OnMethodEnter
+  def onEnter(@Advice.Argument(0) send: Send): Scope = {
+    Kamon.storeContext(send.asInstanceOf[ContextContainer].context)
   }
 
-  @OnMethodExit(suppress = classOf[Throwable])
-  def onExit(@Enter scope: Scope): Unit = {
-    scope.close()
+  @OnMethodExit
+  def onExit(@Advice.Enter scope: Scope): Unit = {
+    scope.asInstanceOf[Scope].close()
   }
 }
 
