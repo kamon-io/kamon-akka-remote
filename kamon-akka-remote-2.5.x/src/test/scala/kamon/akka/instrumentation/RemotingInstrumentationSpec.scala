@@ -77,6 +77,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
 
       expectMsg("name=deploy-remote-actor-1")
     }
+/*
 
     "propagate the TraceContext when sending a message to a remotely deployed actor" in {
       val remoteRef = system.actorOf(TraceTokenReplier.remoteProps(None, RemoteSystemAddress), "remote-message-fixture")
@@ -187,6 +188,7 @@ class RemotingInstrumentationSpec extends TestKitBase with WordSpecLike with Mat
       forAll(sizes) { s => assert(s > 0) }
     }
 
+*/
 
   }
 
