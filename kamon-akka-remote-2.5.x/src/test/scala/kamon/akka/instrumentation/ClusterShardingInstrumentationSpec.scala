@@ -17,8 +17,6 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
     ActorSystem("cluster-sharding-spec-system", ConfigFactory.parseString(
       """
         |akka {
-        |  loggers = ["akka.event.slf4j.Slf4jLogger"]
-        |
         |  actor {
         |    provider = "cluster"
         |  }
@@ -36,8 +34,6 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
   val remoteSystem: ActorSystem = ActorSystem("cluster-sharding-spec-remote-system", ConfigFactory.parseString(
     """
       |akka {
-      |  loggers = ["akka.event.slf4j.Slf4jLogger"]
-      |
       |  actor {
       |    provider = "cluster"
       |  }
