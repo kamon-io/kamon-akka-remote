@@ -72,7 +72,7 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
         extractEntityId = extractEntityId,
         extractShardId = extractShardId)
 
-      Kamon.withContext(contextWithBroadcast("cluster-sharding-actor-123")) {
+      Kamon.storeContext(contextWithBroadcast("cluster-sharding-actor-123")) {
         replierRegion ! "123"
       }
 

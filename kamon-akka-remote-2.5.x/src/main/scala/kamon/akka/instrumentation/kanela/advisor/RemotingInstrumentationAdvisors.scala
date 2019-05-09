@@ -1,16 +1,16 @@
 package akka.remote.kamon.instrumentation.kanela.advisor
 
-import akka.actor.{Address, AddressFromURIString, ExtendedActorSystem}
+import akka.actor.{Address, AddressFromURIString}
 import akka.dispatch.sysmsg.SystemMessage
 import akka.remote.ContextAwareWireFormats.AckAndContextAwareEnvelopeContainer
 import akka.remote.EndpointManager.Send
 import kamon.Kamon
-import kamon.akka.context.ContextContainer
 import kamon.context.Storage.Scope
 import akka.remote.RemoteActorRefProvider
 import akka.util.ByteString
 import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamReader
+import kamon.instrumentation.akka.akka25.mixin.ContextContainer
 import kanela.agent.libs.net.bytebuddy.asm.Advice
 import kanela.agent.libs.net.bytebuddy.asm.Advice.{Argument, Enter, OnMethodEnter, OnMethodExit, This}
 
@@ -32,7 +32,7 @@ object EndpointWriterWriteSendMethodAdvisor {
 
   @OnMethodEnter
   def onEnter(@Advice.Argument(0) send: Send): Scope = {
-    Kamon.storeContext(send.asInstanceOf[ContextContainer].context)
+    Kamon.store(send.asInstanceOf[ContextContainer].context)
   }
 
   @OnMethodExit
@@ -71,7 +71,7 @@ object AkkaPduProtobufCodecDecodeMessageMethodAdvisor {
         val ctx = Kamon.defaultBinaryPropagation().read(
         ByteStreamReader.of(remoteCtx.getContext.toByteArray)
         )
-        Kamon.storeContext(ctx)
+        Kamon.store(ctx)
       }
 
       RemotingMetrics.recordMessageInbound(

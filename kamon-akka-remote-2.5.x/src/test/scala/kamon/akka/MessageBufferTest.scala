@@ -15,7 +15,7 @@ class MessageBufferTest extends WordSpec with Matchers {
       val messageBuffer = MessageBuffer.empty
       val key = Context.key("some_key", "")
 
-      Kamon.withContext(Context.of(key, "some_value")) {
+      Kamon.storeContext(Context.of(key, "some_value")) {
         messageBuffer.append("scala", Actor.noSender)
       }
 

@@ -14,28 +14,25 @@
  */
 
 
-val kamonVersion        = "2.0.0-07ebec0a2acd1ecd22a6cf41cb770e8daf39e3cc"
-val kamonScalaVersion   = "1.1.0-M1"
-val kamonAkkaVersion    = "2.0.0-00ac32f97ca3e8e4aba98f37f48b66677d0a493f"
+val kamonVersion        = "2.0.0-M4"
+val kamonScalaVersion   = "2.0.0-M1"
+val kamonAkkaVersion    = "2.0.0-M1"
+val akka25Version       = "2.5.22"
 
-val akka25Version       = "2.5.13"
+val kamonCore           = "io.kamon"            %%  "kamon-core"            % kamonVersion
+val kamonTestkit        = "io.kamon"            %%  "kamon-testkit"         % kamonVersion
+val kamonScala          = "io.kamon"            %%  "kamon-scala-future"    % kamonScalaVersion
+val kamonAkka25         = "io.kamon"            %%  "kamon-akka-2.5"        % kamonAkkaVersion changing()
+val kanelaAgent         = "io.kamon"            %   "kanela-agent"          % "1.0.0-M2"
 
-val kamonCore           = "io.kamon"                    %%  "kamon-core"            % kamonVersion
-val kamonTestkit        = "io.kamon"                    %%  "kamon-testkit"         % kamonVersion
-val kamonScala          = "io.kamon"                    %%  "kamon-scala-future"    % kamonScalaVersion
-val kamonAkka25         = "io.kamon"                    %%  "kamon-akka-2.5"        % kamonAkkaVersion
+val akkaActor25         = "com.typesafe.akka"   %%  "akka-actor"            % akka25Version
+val akkaSlf4j25         = "com.typesafe.akka"   %%  "akka-slf4j"            % akka25Version
+val akkaTestKit25       = "com.typesafe.akka"   %%  "akka-testkit"          % akka25Version
+val akkaRemote25        = "com.typesafe.akka"   %%  "akka-remote"           % akka25Version
+val akkaCluster25       = "com.typesafe.akka"   %%  "akka-cluster"          % akka25Version
+val akkaSharding25      = "com.typesafe.akka"   %%  "akka-cluster-sharding" % akka25Version
 
-val kanelaScalaExtension  = "io.kamon"  %%  "kanela-scala-extension"  % "0.0.14"
-val kanelaAgent       =  "io.kamon" % "kanela-agent" % "0.0.21-SNAPSHOT" changing()
-
-val akkaActor25         = "com.typesafe.akka"           %%  "akka-actor"            % akka25Version
-val akkaSlf4j25         = "com.typesafe.akka"           %%  "akka-slf4j"            % akka25Version
-val akkaTestKit25       = "com.typesafe.akka"           %%  "akka-testkit"          % akka25Version
-val akkaRemote25        = "com.typesafe.akka"           %%  "akka-remote"           % akka25Version
-val akkaCluster25       = "com.typesafe.akka"           %%  "akka-cluster"          % akka25Version
-val akkaSharding25      = "com.typesafe.akka"           %%  "akka-cluster-sharding" % akka25Version
-
-val protobuf            = "com.google.protobuf"         % "protobuf-java"           % "3.4.0"
+val protobuf            = "com.google.protobuf" % "protobuf-java"           % "3.4.0"
 
 parallelExecution in Test in Global := false
 
@@ -54,7 +51,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
   .settings(javaAgents += kanelaAgent % "compile;test")
   .settings(
     libraryDependencies ++=
-      compileScope(akkaActor25, kamonCore, kamonAkka25, kamonScala, akkaRemote25, akkaCluster25, kanelaAgent) ++
-        providedScope(akkaSharding25, aspectJ) ++
-        optionalScope(logbackClassic) ++
-        testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit, kanelaAgent))
+      compileScope(kamonCore, kamonAkka25, kamonScala) ++
+      providedScope(akkaActor25, akkaRemote25, akkaCluster25, kanelaAgent, akkaSharding25) ++
+      optionalScope(logbackClassic) ++
+      testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit, kanelaAgent))

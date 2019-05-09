@@ -111,10 +111,8 @@ class ShardingInstrumentationSpec
         entitiesPerRegion(shardType).distribution(false).max should be(3)
       }
 
-
-      val shardentityDistribution = entitiesPerShard(shardType).distribution(true)
-      shardentityDistribution.max should be(2)
-
+      Thread.sleep(100)
+      entitiesPerShard(shardType).distribution(true).max should be(2)
       messagesPerRegion(shardType).value(true) should be(3)
       messagesPerShard(shardType).distribution(true).sum should be(3)
     }

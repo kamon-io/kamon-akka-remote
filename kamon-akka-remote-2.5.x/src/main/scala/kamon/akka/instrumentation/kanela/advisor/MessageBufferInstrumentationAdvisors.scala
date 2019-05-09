@@ -2,8 +2,8 @@ package kamon.akka.instrumentation.kanela.advisor
 
 import _root_.kanela.agent.libs.net.bytebuddy.asm.Advice._
 import kamon.Kamon
-import kamon.akka.context.ContextContainer
 import kamon.context.Storage.Scope
+import kamon.instrumentation.akka.akka25.mixin.ContextContainer
 
 /**
   * Advisor for akka.util.MessageBuffer.Node::constructor
@@ -23,7 +23,7 @@ class MessageBufferNodeMethodApplyAdvisor
 object MessageBufferNodeMethodApplyAdvisor {
   @OnMethodEnter(suppress = classOf[Throwable])
   def onEnter(@This node: ContextContainer): Scope = {
-    Kamon.storeContext(node.context)
+    Kamon.store(node.context)
   }
 
   @OnMethodExit(suppress = classOf[Throwable])

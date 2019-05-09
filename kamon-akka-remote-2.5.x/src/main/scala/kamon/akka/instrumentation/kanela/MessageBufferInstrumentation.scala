@@ -1,7 +1,7 @@
 package kamon.akka.instrumentation.kanela
 
 import kamon.akka.instrumentation.kanela.advisor.{MessageBufferNodeConstructorAdvisor, MessageBufferNodeMethodApplyAdvisor}
-import kamon.instrumentation.akka25.mixin.HasTransientContextMixin
+import kamon.instrumentation.akka.akka25.mixin.HasTransientContextMixin
 import kanela.agent.api.instrumentation.InstrumentationBuilder
 
 class MessageBufferInstrumentation extends InstrumentationBuilder {
