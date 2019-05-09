@@ -59,8 +59,8 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
     case entityId:String => (entityId.toInt % 10).toString
   }
 
-  "The Cluster-Sharding instrumentation akka-2.5" should {
-    "propagate the TraceContext when sending message to sharding region" in {
+  "The Cluster Sharding instrumentation" should {
+    "propagate the current Context when sending message to sharding region" in {
 
       Cluster(system).join(Cluster(system).selfAddress)
       Cluster(remoteSystem).join(Cluster(system).selfAddress)

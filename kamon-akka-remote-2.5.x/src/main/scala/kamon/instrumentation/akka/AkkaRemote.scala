@@ -1,4 +1,4 @@
-package kamon.akka.instrumentation
+package kamon.instrumentation.akka
 
 import kamon.Kamon
 

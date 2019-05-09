@@ -2,9 +2,10 @@ package akka.kamon.instrumentation.kanela.advisor
 
 import _root_.kanela.agent.libs.net.bytebuddy.asm.Advice._
 import akka.cluster.sharding.{Shard, ShardRegion}
-import akka.kamon.instrumentation.cluster.{ShardedType, ShardingMetrics}
-import kamon.akka.instrumentation.kanela.cluster.ShardingInstrumentation.regionGroupName
+import akka.kamon.instrumentation.cluster.ShardingMetrics
+import kamon.instrumentation.akka.akka25.kanela2.cluster.ShardingInstrumentation.regionGroupName
 import kamon.instrumentation.akka.AkkaInstrumentation
+import kamon.instrumentation.akka.akka25.ShardedType
 import kamon.util.Filter.Glob
 
 class ShardRegionConstructorAdvisor

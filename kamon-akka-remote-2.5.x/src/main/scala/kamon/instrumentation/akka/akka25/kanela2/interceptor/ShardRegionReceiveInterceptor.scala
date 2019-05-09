@@ -4,7 +4,8 @@ import java.util.concurrent.Callable
 
 import akka.actor.Actor
 import akka.cluster.sharding.ShardRegion
-import akka.kamon.instrumentation.cluster.{ShardedType, ShardingMetrics}
+import akka.kamon.instrumentation.cluster.ShardingMetrics
+import kamon.instrumentation.akka.akka25.ShardedType
 import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation._
 
 class ShardRegionReceiveInterceptor {

@@ -9,14 +9,15 @@ import akka.remote.WireFormats.{AcknowledgementInfo, ActorRefData, AddressData, 
 import akka.remote.{Ack, SeqNo}
 import akka.util.ByteString
 import kamon.Kamon
-import kamon.akka.RemotingMetrics
 import kamon.context.BinaryPropagation.ByteStreamWriter
+import kamon.instrumentation.akka.AkkaRemoteMetrics
 import kanela.agent.libs.net.bytebuddy.implementation.bind.annotation.{Argument, RuntimeType}
 
 /**
   * Interceptor for akka.remote.transport.AkkaPduProtobufCodec$::constructMessage
   */
 class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
+
   @RuntimeType
   def aroundConstructMessage(@Argument(0) localAddress: Address,
                              @Argument(1) recipient: ActorRef,
@@ -24,6 +25,7 @@ class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
                              @Argument(3) senderOption: OptionVal[ActorRef],
                              @Argument(4) seqOption: Option[SeqNo],
                              @Argument(5) ackOption: Option[Ack]): AnyRef = {
+
     val ackAndEnvelopeBuilder = AckAndContextAwareEnvelopeContainer.newBuilder
     val envelopeBuilder = ContextAwareRemoteEnvelope.newBuilder
 
@@ -44,7 +46,7 @@ class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
 
     ackAndEnvelopeBuilder.setEnvelope(envelopeBuilder)
 
-    RemotingMetrics.recordOutboundMessage(
+    AkkaRemoteMetrics.recordOutboundMessage(
       localAddress = localAddress,
       recipientAddress = Some(recipient.path.address),
       size = envelopeBuilder.getMessage.getMessage.size()

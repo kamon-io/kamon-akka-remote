@@ -1,13 +1,37 @@
-package kamon.akka
+package kamon.instrumentation.akka
 
 import akka.actor.Address
 import kamon.Kamon
-import kamon.metric.MeasurementUnit
+import kamon.metric.InstrumentGroup
+import kamon.metric.MeasurementUnit.information
 import kamon.tag.TagSet
 
-object RemotingMetrics {
-  val messages = Kamon.histogram("akka.remote.message-size", MeasurementUnit.information.bytes)
-  val serialization = Kamon.histogram("akka.remote.serialization-time", MeasurementUnit.time.nanoseconds)
+object AkkaRemoteMetrics {
+
+  val MessageSize = Kamon.histogram (
+    name = "akka.remote.message-size",
+    description = "Tracks the distribution of incoming and outgoing message sizes",
+    unit = information.bytes
+  )
+
+  val SerializationTime = Kamon.timer (
+    name = "akka.remote.serialization-time",
+    description = "Tracks the time taken to serialize outgoing messages"
+  )
+
+  val DeserializationTime = Kamon.timer (
+    name = "akka.remote.deserialization-time",
+    description = "Tracks the time taken to deserialize incoming messages"
+  )
+
+
+
+  class SerializationInstruments(systemName: String) extends InstrumentGroup(TagSet.of("system", systemName)) {
+    val messageSize = register(MessageSize)
+    val serializationTime = register(SerializationTime)
+    val deserializationTime = register(DeserializationTime)
+  }
+
 
 
   def recordMessageInbound(localAddress: Address, senderAddress: Option[Address], size: Long): Unit = recordMessage(localAddress, senderAddress, size, "in")
@@ -26,7 +50,7 @@ object RemotingMetrics {
       port <- addr.port
     } yield host+":"+port
 
-    messages.withTags(
+    MessageSize.withTags(
       TagSet.from(
         Map(
           "system"      -> localAddress.system,
@@ -39,14 +63,14 @@ object RemotingMetrics {
     ).record(size)
   }
 
-  def recordSerialization(system: String, time: Long) = serialization.withTags(
+  def recordSerialization(system: String, time: Long) = SerializationTime.withTags(
     TagSet.from(Map(
       "system" -> system,
       "direction" -> "out"
     ))
   ).record(time)
 
-  def recordDeserialization(system: String, time: Long) = serialization.withTags(
+  def recordDeserialization(system: String, time: Long) = SerializationTime.withTags(
     TagSet.from(
       Map(
         "system" -> system,

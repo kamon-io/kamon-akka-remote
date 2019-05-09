@@ -20,8 +20,9 @@ val kamonAkkaVersion    = "2.0.0-M1"
 val akka25Version       = "2.5.22"
 
 val kamonCore           = "io.kamon"            %%  "kamon-core"            % kamonVersion
-val kamonTestkit        = "io.kamon"            %%  "kamon-testkit"         % kamonVersion
+val kamonTestkit        = "io.kamon"            %%  "kamon-testkit"         % kamonVersion force()
 val kamonScala          = "io.kamon"            %%  "kamon-scala-future"    % kamonScalaVersion
+val kamonCommon          = "io.kamon"            %%  "kamon-instrumentation-common"    % kamonScalaVersion force()
 val kamonAkka25         = "io.kamon"            %%  "kamon-akka-2.5"        % kamonAkkaVersion changing()
 val kanelaAgent         = "io.kamon"            %   "kanela-agent"          % "1.0.0-M2"
 
@@ -51,7 +52,7 @@ lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-re
   .settings(javaAgents += kanelaAgent % "compile;test")
   .settings(
     libraryDependencies ++=
-      compileScope(kamonCore, kamonAkka25, kamonScala) ++
+      compileScope(kamonCore, kamonAkka25, kamonScala, kamonCommon) ++
       providedScope(akkaActor25, akkaRemote25, akkaCluster25, kanelaAgent, akkaSharding25) ++
       optionalScope(logbackClassic) ++
       testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit, kanelaAgent))

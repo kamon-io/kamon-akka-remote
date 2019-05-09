@@ -1,4 +1,4 @@
-package akka.kamon.instrumentation.cluster
+package kamon.instrumentation.akka.akka25
 
 import akka.cluster.sharding.ShardRegion
 

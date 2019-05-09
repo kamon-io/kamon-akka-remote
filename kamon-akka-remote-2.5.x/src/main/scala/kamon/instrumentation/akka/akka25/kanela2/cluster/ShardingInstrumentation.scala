@@ -1,8 +1,8 @@
-package kamon.akka.instrumentation.kanela.cluster
+package kamon.instrumentation.akka.akka25.kanela2.cluster
 
 import akka.kamon.instrumentation.kanela.advisor.{ShardConstructorAdvisor, ShardRegionConstructorAdvisor, ShardRegionPostStopAdvisor}
 import akka.kamon.instrumentation.kanela.interceptor.{ShardReceiveInterceptor, ShardRegionReceiveInterceptor}
-import kamon.akka.instrumentation.kanela.mixin.InjectedShardedTypeMixin
+import kamon.instrumentation.akka.akka25.kanela2.mixin.InjectedShardedTypeMixin
 import kanela.agent.api.instrumentation.InstrumentationBuilder
 
 class ShardingInstrumentation extends InstrumentationBuilder {
@@ -16,7 +16,7 @@ class ShardingInstrumentation extends InstrumentationBuilder {
     *
     * Mix:
     *
-    * akka.cluster.sharding.ShardRegion with kamon.akka.instrumentation.kanela.mixin.InjectedShardedTypeMixin
+    * akka.cluster.sharding.ShardRegion with kamon.instrumentation.akka.akka25.kanela.mixin.InjectedShardedTypeMixin
     *
     */
   onType("akka.cluster.sharding.ShardRegion")
@@ -33,7 +33,7 @@ class ShardingInstrumentation extends InstrumentationBuilder {
     *
     * Mix:
     *
-    * akka.cluster.sharding.Shard with kamon.akka.instrumentation.kanela.mixin.InjectedShardedTypeMixin
+    * akka.cluster.sharding.Shard with kamon.instrumentation.akka.akka25.kanela.mixin.InjectedShardedTypeMixin
     *
     */
   onType("akka.cluster.sharding.Shard")

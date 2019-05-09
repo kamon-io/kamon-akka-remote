@@ -1,8 +1,8 @@
-package kamon.akka.instrumentation.kanela.mixin
+package kamon.instrumentation.akka.akka25.kanela2.mixin
 
 import akka.cluster.sharding.ShardRegion
 import akka.cluster.sharding.ShardRegion.ExtractEntityId
-import akka.kamon.instrumentation.cluster.ShardedType
+import kamon.instrumentation.akka.akka25.ShardedType
 
 class InjectedShardedTypeMixin extends ShardedType {
   var _typeName: String = _
