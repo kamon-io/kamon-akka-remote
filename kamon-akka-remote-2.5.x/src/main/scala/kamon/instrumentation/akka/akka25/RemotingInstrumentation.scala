@@ -5,6 +5,7 @@ import akka.kamon.instrumentation.kanela.interceptor.AkkaPduProtobufCodecConstru
 import akka.remote.kamon.instrumentation.kanela.advisor._
 import kamon.Kamon
 import kamon.context.Storage.Scope
+import kamon.instrumentation.akka.AkkaRemoteInstrumentation
 import kamon.instrumentation.akka.AkkaRemoteMetrics.SerializationInstruments
 import kamon.instrumentation.context.{CaptureCurrentContextOnExit, HasContext}
 import kanela.agent.api.instrumentation.InstrumentationBuilder
@@ -18,7 +19,7 @@ class RemotingInstrumentation extends InstrumentationBuilder {
     * Context might be lost after the buffering, so we make sure we capture the context when the Send command was
     * created and then apply it during the EndpointWrite.writeSend method execution (see bellow).
     */
-  onType("akka.remote.EndpointManager.Send")
+  onType("akka.remote.EndpointManager$Send")
     .mixin(classOf[HasContext.Mixin])
     .advise(isConstructor, CaptureCurrentContextOnExit)
 
@@ -39,9 +40,9 @@ class RemotingInstrumentation extends InstrumentationBuilder {
     * Mixin Serialization Instruments to the Actor System and use them to record the serialization and deserialization
     * time metrics.
     */
-  onType("akka.actor.ActorSystem")
+  onType("akka.actor.ActorSystemImpl")
     .mixin(classOf[HasSerializationInstruments.Mixin])
-    .advise(isConstructor, HasSerializationInstruments)
+    .advise(isConstructor, InitializeActorSystemAdvice)
 
   onType("akka.remote.MessageSerializer$")
     .advise(method("serialize"), MeasureSerializationTime)
@@ -51,12 +52,12 @@ class RemotingInstrumentation extends InstrumentationBuilder {
 
 object WriteSendWithContext {
 
-  @Advice.OnMethodEnter(suppress = classOf[Throwable])
-  def enter(@Advice.Argument(0) send: HasContext): Scope = {
-    Kamon.store(send.context)
+  @Advice.OnMethodEnter
+  def enter(@Advice.Argument(0) send: Any): Scope = {
+    Kamon.store(send.asInstanceOf[HasContext].context)
   }
 
-  @Advice.OnMethodExit(suppress = classOf[Throwable])
+  @Advice.OnMethodExit
   def exit(@Advice.Enter scope: Scope): Unit = {
     scope.asInstanceOf[Scope].close()
   }
@@ -73,8 +74,11 @@ object HasSerializationInstruments {
     override def setSerializationInstruments(instruments: SerializationInstruments): Unit =
       serializationInstruments = instruments
   }
+}
 
-  @Advice.OnMethodExit(suppress = classOf[Throwable])
+object InitializeActorSystemAdvice {
+
+  @Advice.OnMethodExit
   def exit(@Advice.This system: ActorSystem with HasSerializationInstruments): Unit =
     system.setSerializationInstruments(new SerializationInstruments(system.name))
 
@@ -84,29 +88,34 @@ object MeasureSerializationTime {
 
   @Advice.OnMethodEnter
   def enter(): Long = {
-    System.nanoTime()
+    if(AkkaRemoteInstrumentation.settings().trackSerializationMetrics) System.nanoTime() else 0L
   }
 
   @Advice.OnMethodExit
-  def exit(@Advice.Argument(0) system: AnyRef, @Advice.Enter startNanoTime: Long): Unit =
-    system.asInstanceOf[HasSerializationInstruments]
-      .serializationInstruments
-      .serializationTime
-      .record(startNanoTime - System.nanoTime())
+  def exit(@Advice.Argument(0) system: AnyRef, @Advice.Enter startNanoTime: Long): Unit = {
+    if(startNanoTime != 0L) {
+      system.asInstanceOf[HasSerializationInstruments]
+        .serializationInstruments
+        .serializationTime
+        .record(startNanoTime - System.nanoTime())
+    }
+  }
 }
 
 object MeasureDeserializationTime {
 
   @Advice.OnMethodEnter
   def enter(): Long = {
-    System.nanoTime()
+    if(AkkaRemoteInstrumentation.settings().trackSerializationMetrics) System.nanoTime() else 0L
   }
 
   @Advice.OnMethodExit
   def exit(@Advice.Argument(0) system: AnyRef, @Advice.Enter startNanoTime: Long): Unit = {
-    system.asInstanceOf[HasSerializationInstruments]
-      .serializationInstruments
-      .deserializationTime
-      .record(startNanoTime - System.nanoTime())
+    if(startNanoTime != 0L) {
+      system.asInstanceOf[HasSerializationInstruments]
+        .serializationInstruments
+        .deserializationTime
+        .record(startNanoTime - System.nanoTime())
+    }
   }
 }

@@ -5,13 +5,15 @@ import akka.cluster.sharding.ShardCoordinator.Internal.{HandOff, ShardStopped}
 import akka.cluster.sharding.ShardCoordinator.ShardAllocationStrategy
 import akka.cluster.sharding.ShardRegion.{GracefulShutdown, ShardId}
 import akka.cluster.sharding.{ClusterSharding, ClusterShardingSettings, ShardRegion}
-import akka.kamon.instrumentation.cluster.ShardingMetrics
 import akka.testkit.TestActor.Watch
 import akka.testkit.{ImplicitSender, TestKitBase}
 import com.typesafe.config.ConfigFactory
+import kamon.instrumentation.akka.AkkaClusterShardingMetrics._
+import kamon.tag.TagSet
 import kamon.testkit.{InstrumentInspection, MetricInspection}
+import org.scalactic.TimesOnInt.convertIntToRepeater
 import org.scalatest.concurrent.Eventually
-import org.scalatest.{Matchers, WordSpecLike, time}
+import org.scalatest.{Matchers, WordSpecLike}
 
 import scala.collection.immutable
 import scala.concurrent.Future
@@ -28,7 +30,6 @@ class ShardingInstrumentationSpec
     with MetricInspection.Syntax
     with InstrumentInspection.Syntax
     with Eventually {
-  import ShardingMetrics._
 
   lazy val system: ActorSystem = {
     ActorSystem(
@@ -55,13 +56,8 @@ class ShardingInstrumentationSpec
     )
   }
 
-  val entityIdExtractor: ShardRegion.ExtractEntityId = {
-    case msg @ TestMessage(_, entity) => (entity, msg)
-  }
-
-  def shardIdExtractor: ShardRegion.ExtractShardId = {
-    case msg @ TestMessage(shard, _) => shard
-  }
+  val entityIdExtractor: ShardRegion.ExtractEntityId = { case msg @ TestMessage(_, entity) => (entity, msg) }
+  val shardIdExtractor: ShardRegion.ExtractShardId = { case msg @ TestMessage(shard, _) => shard }
 
   val StaticAllocationStrategy = new ShardAllocationStrategy {
     override def allocateShard(
@@ -71,6 +67,7 @@ class ShardingInstrumentationSpec
       : Future[ActorRef] = {
       Future.successful(requester)
     }
+
     override def rebalance(
         currentShardAllocations: Map[ActorRef, immutable.IndexedSeq[ShardId]],
         rebalanceInProgress: Set[ShardId]): Future[Set[ShardId]] = {
@@ -78,11 +75,7 @@ class ShardingInstrumentationSpec
     }
   }
 
-  def registerTypes(shardedType: String,
-                    props: Props,
-                    system: ActorSystem,
-                    allocationStrategy: ShardAllocationStrategy) =
-
+  def registerTypes(shardedType: String, props: Props, system: ActorSystem, allocationStrategy: ShardAllocationStrategy): ActorRef =
     ClusterSharding(system).start(
       typeName = shardedType,
       entityProps = props,
@@ -96,25 +89,33 @@ class ShardingInstrumentationSpec
   class ShardedTypeContext  {
     val shardType = s"TestType-${Random.nextLong()}"
     val region = registerTypes(shardType, TestActor.props(testActor), system, StaticAllocationStrategy)
+    val shardTags = TagSet.builder()
+      .add("type", shardType)
+      .add("system", system.name)
+      .build()
   }
 
-  "Cluster sharding instrumentation" should {
+  "the Cluster sharding instrumentation" should {
     "track shards, entities and messages" in new ShardedTypeContext {
       region ! TestMessage("s1", "e1")
       region ! TestMessage("s1", "e2")
       region ! TestMessage("s2", "e3")
 
-      (1 to 3).foreach(_ => expectMsg("OK"))
-
-      eventually(timeout(Span(2, Seconds))) {
-        shardsPerRegion(shardType).distribution(false).max should be(2)
-        entitiesPerRegion(shardType).distribution(false).max should be(3)
+      3 times {
+        expectMsg("OK")
       }
 
-      Thread.sleep(100)
-      entitiesPerShard(shardType).distribution(true).max should be(2)
-      messagesPerRegion(shardType).value(true) should be(3)
-      messagesPerShard(shardType).distribution(true).sum should be(3)
+      RegionProcessedMessages.withTags(shardTags).value() shouldBe 3L
+
+      eventually(timeout(Span(2, Seconds))) {
+        RegionHostedShards.withTags(shardTags).distribution().max shouldBe 2L
+        RegionHostedEntities.withTags(shardTags).distribution().max shouldBe 3L
+      }
+
+      eventually(timeout(Span(2, Seconds))) {
+        ShardProcessedMessages.withTags(shardTags).distribution(resetState = false).sum shouldBe 3L
+        ShardHostedEntities.withTags(shardTags).distribution(resetState = false).max shouldBe 2L
+      }
     }
 
     "clean metrics on handoff" in new ShardedTypeContext {
@@ -122,17 +123,16 @@ class ShardingInstrumentationSpec
       expectMsg("OK")
 
       eventually(timeout(Span(2, Seconds))) {
-        shardsPerRegion(shardType).distribution(false).max should be(1)
-        entitiesPerRegion(shardType).distribution(false).max should be(1)
-        entitiesPerShard(shardType).distribution(false).max should be(1)
+        RegionHostedShards.withTags(shardTags).distribution().max shouldBe 1L
+        RegionHostedEntities.withTags(shardTags).distribution().max shouldBe 1L
       }
 
       region ! HandOff("s1")
       expectMsg(ShardStopped("s1"))
 
       eventually(timeout(Span(2, Seconds))) {
-        shardsPerRegion(shardType).distribution(true).max should be(0)
-        entitiesPerRegion(shardType).distribution(true).max should be (0)
+        RegionHostedShards.withTags(shardTags).distribution().max shouldBe 0L
+        RegionHostedEntities.withTags(shardTags).distribution().max shouldBe 0L
       }
     }
 
@@ -140,34 +140,31 @@ class ShardingInstrumentationSpec
       region ! TestMessage("s1", "e1")
       expectMsg("OK")
 
-      eventually(timeout(Span(2, Seconds))) {
-        shardsPerRegion(shardType).distribution(true).max should be(1)
-        entitiesPerShard(shardType).distribution(true).max should be(1)
-        entitiesPerRegion(shardType).distribution(true).max should be(1)
-      }
+      RegionHostedShards.tagValues("type") should contain(shardType)
+      RegionHostedEntities.tagValues("type") should contain(shardType)
+      RegionProcessedMessages.tagValues("type") should contain(shardType)
 
       testActor ! Watch(region)
       region ! GracefulShutdown
-
       expectTerminated(region)
 
-      eventually {
-        shardsPerRegion(shardType).distribution(true).max should be(0)
-        entitiesPerRegion(shardType).distribution(true).max should be(0)
-      }
+      RegionHostedShards.tagValues("type") should not contain(shardType)
+      RegionHostedEntities.tagValues("type") should not contain(shardType)
+      RegionProcessedMessages.tagValues("type") should not contain(shardType)
     }
   }
 
 }
 
 object TestActor {
-  val shardedType = "Test"
-  def props(testActor: ActorRef) = Props(classOf[TestActor], testActor)
+
+  def props(testActor: ActorRef) =
+    Props(classOf[TestActor], testActor)
 }
 
 class TestActor(testActor: ActorRef) extends Actor {
 
-  override def receive = {
+  override def receive: Actor.Receive = {
     case _ => testActor ! "OK"
   }
 }

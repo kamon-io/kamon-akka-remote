@@ -11,12 +11,15 @@ import kamon.context.Context
 import kamon.testkit.MetricInspection
 import org.scalatest.{Matchers, WordSpecLike}
 
-class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with MetricInspection.Syntax with ContextTesting {
+class MessageBufferInstrumentationSpec extends TestKitBase with WordSpecLike with Matchers with ImplicitSender with MetricInspection.Syntax with ContextTesting {
 
   implicit lazy val system: ActorSystem = {
     ActorSystem("cluster-sharding-spec-system", ConfigFactory.parseString(
       """
         |akka {
+        |  loglevel = INFO
+        |  loggers = [ "akka.event.slf4j.Slf4jLogger" ]
+        |
         |  actor {
         |    provider = "cluster"
         |  }
@@ -34,6 +37,9 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
   val remoteSystem: ActorSystem = ActorSystem("cluster-sharding-spec-remote-system", ConfigFactory.parseString(
     """
       |akka {
+      |  loglevel = INFO
+      |  loggers = [ "akka.event.slf4j.Slf4jLogger" ]
+      |
       |  actor {
       |    provider = "cluster"
       |  }
@@ -59,8 +65,8 @@ class ClusterShardingInstrumentationSpec extends TestKitBase with WordSpecLike w
     case entityId:String => (entityId.toInt % 10).toString
   }
 
-  "The Cluster Sharding instrumentation" should {
-    "propagate the current Context when sending message to sharding region" in {
+  "The MessageBuffer instrumentation" should {
+    "propagate the current Context when sending message to an sharding region that has not been started" in {
 
       Cluster(system).join(Cluster(system).selfAddress)
       Cluster(remoteSystem).join(Cluster(system).selfAddress)
