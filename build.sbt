@@ -1,3 +1,5 @@
+import sbt.Tests.{Group, SubProcess}
+
 /* =========================================================================================
  * Copyright © 2013-2018 the kamon project <http://kamon.io/>
  *
@@ -13,46 +15,100 @@
  * =========================================================================================
  */
 
+val kamonCore       = "io.kamon" %% "kamon-core"         % "2.0.0-RC1"
+val kamonTestkit    = "io.kamon" %% "kamon-testkit"      % "2.0.0-RC1"
+val kamonScala      = "io.kamon" %% "kamon-scala-future" % "2.0.0-RC1"
+val kamonExecutors  = "io.kamon" %% "kamon-executors"    % "2.0.0-RC1"
+val kamonAkka       = "io.kamon" %% "kamon-akka"         % "2.0.0-RC1"
+val kamonInstrument = "io.kamon" %% "kamon-instrumentation-common" % "2.0.0-RC1"
+val kanelaAgent     =  "io.kamon" % "kanela-agent"       % "1.0.0-M3"
 
-val kamonVersion        = "2.0.0-M4"
-val kamonScalaVersion   = "2.0.0-M1"
-val kamonAkkaVersion    = "2.0.0-M1"
-val akka25Version       = "2.5.22"
+val akka24Version = "2.4.20"
+val akka25Version = "2.5.23"
 
-val kamonCore           = "io.kamon"            %%  "kamon-core"            % kamonVersion
-val kamonTestkit        = "io.kamon"            %%  "kamon-testkit"         % kamonVersion force()
-val kamonScala          = "io.kamon"            %%  "kamon-scala-future"    % kamonScalaVersion
-val kamonCommon          = "io.kamon"            %%  "kamon-instrumentation-common"    % kamonScalaVersion force()
-val kamonAkka25         = "io.kamon"            %%  "kamon-akka-2.5"        % kamonAkkaVersion changing()
-val kanelaAgent         = "io.kamon"            %   "kanela-agent"          % "1.0.0-M2"
-
-val akkaActor25         = "com.typesafe.akka"   %%  "akka-actor"            % akka25Version
-val akkaSlf4j25         = "com.typesafe.akka"   %%  "akka-slf4j"            % akka25Version
-val akkaTestKit25       = "com.typesafe.akka"   %%  "akka-testkit"          % akka25Version
-val akkaRemote25        = "com.typesafe.akka"   %%  "akka-remote"           % akka25Version
-val akkaCluster25       = "com.typesafe.akka"   %%  "akka-cluster"          % akka25Version
-val akkaSharding25      = "com.typesafe.akka"   %%  "akka-cluster-sharding" % akka25Version
-
-val protobuf            = "com.google.protobuf" % "protobuf-java"           % "3.4.0"
-
-parallelExecution in Test in Global := false
+val akkaActor       = "com.typesafe.akka"   %% "akka-actor"             % akka25Version
+val akkaTestkit     = "com.typesafe.akka"   %% "akka-testkit"           % akka25Version
+val akkaSLF4J       = "com.typesafe.akka"   %% "akka-slf4j"             % akka25Version
+val akkaRemote      = "com.typesafe.akka"   %% "akka-remote"            % akka25Version
+val akkaCluster     = "com.typesafe.akka"   %% "akka-cluster"           % akka25Version
+val akkaSharding    = "com.typesafe.akka"   %% "akka-cluster-sharding"  % akka25Version
+val protobuf        = "com.google.protobuf" %  "protobuf-java"          % "3.4.0"
 
 lazy val `kamon-akka-remote` = (project in file("."))
   .settings(noPublishing: _*)
-  .aggregate(kamonAkkaRemote25)
+  .aggregate(instrumentation, commonTests, testsOnAkka24, testsOnAkka25, benchmarks)
 
-
-lazy val kamonAkkaRemote25 = Project("kamon-akka-remote-25", file("kamon-akka-remote-2.5.x"))
-  .settings(Seq(
-    bintrayPackage := "kamon-akka-remote",
-    moduleName := "kamon-akka-remote-2.5",
-    resolvers += Resolver.mavenLocal
-  ))
-  .enablePlugins(JavaAgent)
-  .settings(javaAgents += kanelaAgent % "compile;test")
+// These common modules contains all the stuff that can be reused between different Akka versions. They compile with
+// Akka 2.4, but the actual modules for each Akka version are only using the sources from these project instead of the
+// compiled classes. This is just to ensure that if there are any binary incompatible changes between Akka 2.4 and 2.5
+// at the internal level, we will still be compiling and testing with the right versions.
+//
+lazy val instrumentation = Project("instrumentation", file("kamon-akka-remote"))
   .settings(
+    name := "kamon-akka-remote",
+    moduleName := "kamon-akka-remote",
+    bintrayPackage := "kamon-akka-remote",
+    scalacOptions += "-target:jvm-1.8",
     libraryDependencies ++=
-      compileScope(kamonCore, kamonAkka25, kamonScala, kamonCommon) ++
-      providedScope(akkaActor25, akkaRemote25, akkaCluster25, kanelaAgent, akkaSharding25) ++
-      optionalScope(logbackClassic) ++
-      testScope(akkaSharding25, scalatest, akkaTestKit25, akkaSlf4j25, logbackClassic, kamonTestkit, kanelaAgent))
+      compileScope(kamonCore, kamonInstrument, kamonScala, kamonExecutors, kamonAkka) ++
+      providedScope(akkaActor, akkaRemote, akkaCluster, akkaSharding, kanelaAgent))
+
+lazy val commonTests = Project("common-tests", file("kamon-akka-remote-common-tests"))
+  .dependsOn(instrumentation)
+  .settings(noPublishing: _*)
+  .settings(
+    test := ((): Unit),
+    libraryDependencies ++=
+      compileScope(kamonCore, kamonInstrument, kamonScala, kamonExecutors) ++
+      providedScope(akkaActor, akkaRemote, akkaCluster, akkaSharding, kanelaAgent) ++
+      testScope(scalatest, kamonTestkit, akkaTestkit, akkaSLF4J, logbackClassic))
+
+
+lazy val testsOnAkka24 = Project("kamon-akka-remote-tests-24", file("kamon-akka-remote-tests-2.4"))
+  .dependsOn(instrumentation)
+  .enablePlugins(JavaAgent)
+  .settings(instrumentationSettings)
+  .settings(noPublishing: _*)
+  .settings(
+    name := "kamon-akka-remote-tests-2.4",
+    testGrouping in Test := removeUnsuportedTests((definedTests in Test).value, kanelaAgentJar.value),
+    unmanagedSourceDirectories in Test ++= (unmanagedSourceDirectories in Test in commonTests).value,
+    unmanagedResourceDirectories in Test ++= (unmanagedResourceDirectories in Test in commonTests).value,
+    libraryDependencies ++=
+      providedScope(onAkka24(akkaActor), onAkka24(akkaRemote), onAkka24(akkaCluster), onAkka24(akkaSharding), kanelaAgent) ++
+      testScope(scalatest, kamonTestkit, onAkka24(akkaTestkit), onAkka24(akkaSLF4J), logbackClassic))
+
+lazy val testsOnAkka25 = Project("kamon-akka-remote-tests-25", file("kamon-akka-remote-tests-2.5"))
+  .dependsOn(instrumentation)
+  .enablePlugins(JavaAgent)
+  .settings(instrumentationSettings)
+  .settings(noPublishing: _*)
+  .settings(
+    name := "kamon-akka-remote-tests-2.5",
+    unmanagedSourceDirectories in Test ++= (unmanagedSourceDirectories in Test in commonTests).value,
+    unmanagedResourceDirectories in Test ++= (unmanagedResourceDirectories in Test in commonTests).value,
+    libraryDependencies ++=
+      providedScope(akkaActor, akkaRemote, akkaCluster, akkaSharding, kanelaAgent) ++
+      testScope(scalatest, kamonTestkit, akkaTestkit, akkaSLF4J, logbackClassic))
+
+lazy val benchmarks = Project("benchmarks", file("kamon-akka-bench"))
+  .enablePlugins(JmhPlugin)
+  .dependsOn(instrumentation)
+  .settings(noPublishing: _*)
+  .settings(
+    libraryDependencies ++= compileScope(akkaActor, kanelaAgent))
+
+def onAkka24(moduleID: ModuleID): ModuleID =
+  moduleID.withRevision(akka24Version)
+
+def removeUnsuportedTests(tests: Seq[TestDefinition], kanelaJar: File): Seq[Group] = {
+  val excludedFeatures = Seq("sharding")
+
+  Seq(
+    new Group("tests", tests.filter(t => excludedFeatures.find(f => t.name.toLowerCase.contains(f)).isEmpty), SubProcess(
+      ForkOptions().withRunJVMOptions(Vector(
+        "-javaagent:" + kanelaJar.toString
+      ))
+    ))
+  )
+}
