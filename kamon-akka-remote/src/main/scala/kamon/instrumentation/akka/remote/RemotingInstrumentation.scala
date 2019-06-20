@@ -96,7 +96,7 @@ object MeasureSerializationTime {
       system.asInstanceOf[HasSerializationInstruments]
         .serializationInstruments
         .serializationTime
-        .record(startNanoTime - System.nanoTime())
+        .record(System.nanoTime() - startNanoTime)
     }
   }
 }
@@ -123,7 +123,7 @@ object MeasureDeserializationTime {
       system.asInstanceOf[HasSerializationInstruments]
         .serializationInstruments
         .deserializationTime
-        .record(startNanoTime - System.nanoTime())
+        .record(System.nanoTime() - startNanoTime)
     }
   }
 }
