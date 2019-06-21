@@ -4,7 +4,9 @@ import java.util.concurrent.atomic.AtomicLong
 
 import akka.actor.Actor
 import kamon.instrumentation.akka.AkkaClusterShardingMetrics.ShardingInstruments
+import kamon.instrumentation.akka.AkkaInstrumentation
 import kamon.instrumentation.akka.instrumentations.VersionFiltering
+import kamon.util.Filter
 import kanela.agent.api.instrumentation.InstrumentationBuilder
 import kanela.agent.libs.net.bytebuddy.asm.Advice
 
@@ -77,8 +79,15 @@ object HasShardCounters {
 object InitializeShardRegionAdvice {
 
   @Advice.OnMethodExit
-  def exit(@Advice.This region: Actor with HasShardingInstruments, @Advice.Argument(0) typeName: String): Unit =
+  def exit(@Advice.This region: Actor with HasShardingInstruments, @Advice.Argument(0) typeName: String): Unit = {
     region.setShardingInstruments(new ShardingInstruments(region.context.system.name, typeName))
+
+    val system = region.context.system
+    val shardingGuardian = system.settings.config.getString("akka.cluster.sharding.guardian-name")
+    val entitiesPath = s"${system.name}/system/$shardingGuardian/$typeName/*/*"
+
+    AkkaInstrumentation.defineActorGroup(s"shardRegion/$typeName", Filter.fromGlob(entitiesPath))
+  }
 }
 
 object InitializeShardAdvice {
