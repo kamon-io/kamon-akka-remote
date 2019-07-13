@@ -163,11 +163,11 @@ class SupervisorOfRemote(echoListener: ActorRef, remoteAddress: Address) extends
   val supervisedChild = context.actorOf(ContextEchoActor.remoteProps(None, remoteAddress), "remotely-supervised-child")
 
   def receive = {
-    case "fail" ⇒  supervisedChild ! "die"
+    case "fail" =>  supervisedChild ! "die"
   }
 
   override def supervisorStrategy: SupervisorStrategy = OneForOneStrategy() {
-    case NonFatal(_) ⇒
+    case NonFatal(_) =>
       echoListener ! currentEchoMessage
       Resume
     case _ => Resume

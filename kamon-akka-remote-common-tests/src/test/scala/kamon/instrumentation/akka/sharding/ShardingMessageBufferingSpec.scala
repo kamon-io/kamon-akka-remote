@@ -60,7 +60,7 @@ class ShardingMessageBufferingSpec extends TestKitBase with WordSpecLike with Ma
     )
 
   val extractEntityId: ShardRegion.ExtractEntityId = {
-    case entityId:String ⇒ (entityId, "reply-trace-token")
+    case entityId:String => (entityId, "reply-trace-token")
   }
   val extractShardId: ShardRegion.ExtractShardId = {
     case entityId:String => (entityId.toInt % 10).toString
