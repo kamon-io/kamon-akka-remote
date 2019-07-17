@@ -32,8 +32,8 @@ class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
     envelopeBuilder.setRecipient(serializeActorRef(recipient.path.address, recipient))
     if (senderOption.isDefined)
       envelopeBuilder.setSender(serializeActorRef(localAddress, senderOption.get))
-    seqOption foreach { seq ⇒ envelopeBuilder.setSeq(seq.rawValue) }
-    ackOption foreach { ack ⇒ ackAndEnvelopeBuilder.setAck(ackBuilder(ack)) }
+    seqOption foreach { seq => envelopeBuilder.setSeq(seq.rawValue) }
+    ackOption foreach { ack => ackAndEnvelopeBuilder.setAck(ackBuilder(ack)) }
     envelopeBuilder.setMessage(serializedMessage)
 
     val out = new ByteArrayOutputStream()
@@ -56,7 +56,7 @@ class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
   private def ackBuilder(ack: Ack): AcknowledgementInfo.Builder = {
     val ackBuilder = AcknowledgementInfo.newBuilder()
     ackBuilder.setCumulativeAck(ack.cumulativeAck.rawValue)
-    ack.nacks foreach { nack ⇒ ackBuilder.addNacks(nack.rawValue) }
+    ack.nacks foreach { nack => ackBuilder.addNacks(nack.rawValue) }
     ackBuilder
   }
 
@@ -69,13 +69,13 @@ class AkkaPduProtobufCodecConstructMessageMethodInterceptor {
 
   // Copied from akka.remote.transport.AkkaPduProtobufCodec because of private access.
   private def serializeAddress(address: Address): AddressData = address match {
-    case Address(protocol, system, Some(host), Some(port)) ⇒
+    case Address(protocol, system, Some(host), Some(port)) =>
       AddressData.newBuilder
         .setHostname(host)
         .setPort(port)
         .setSystem(system)
         .setProtocol(protocol)
         .build()
-    case _ ⇒ throw new IllegalArgumentException(s"Address [$address] could not be serialized: host or port missing.")
+    case _ => throw new IllegalArgumentException(s"Address [$address] could not be serialized: host or port missing.")
   }
 }

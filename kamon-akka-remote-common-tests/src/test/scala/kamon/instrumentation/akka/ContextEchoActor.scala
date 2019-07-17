@@ -7,15 +7,15 @@ import kamon.tag.Lookups._
 
 class ContextEchoActor(creationListener: Option[ActorRef]) extends Actor with ActorLogging {
 
-  creationListener foreach { recipient ⇒
+  creationListener foreach { recipient =>
     recipient ! currentTraceContextInfo
   }
 
   def receive = {
-    case "die" ⇒
+    case "die" =>
       throw new ArithmeticException("Division by zero.")
 
-    case "reply-trace-token" ⇒
+    case "reply-trace-token" =>
       sender ! currentTraceContextInfo
   }
 
